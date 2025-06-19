@@ -7,6 +7,7 @@ import { useState, useContext, useCallback } from "react";
 import axios from "axios";
 import { UserContext } from "@/Contexts/UserContext"
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
 
 
 interface AddCertificateDialogProps {
@@ -26,7 +27,7 @@ export function AddCertificateDialog({ open, onOpenChange, onAdd }: AddCertifica
   const [loading, setLoading] = useState<boolean>(false);
   const [certificateName, setCertificateName] = useState<string>("");
   const [certificateDescription, setCertificateDescription] = useState<string>("");
-   
+   const{t,i18n}=useTranslation();
   let user_type = localStorage.getItem("user-type");
      // Ensure user_type is a valid string before replacing spaces
     user_type = user_type ? user_type.replace(/\s+/g, "-") : null;
@@ -84,6 +85,7 @@ export function AddCertificateDialog({ open, onOpenChange, onAdd }: AddCertifica
           headers: {
             Authorization: `Bearer ${userToken}`,
             "Content-Type": "multipart/form-data",
+            "Accept-Language": i18n.language,
           },
         }
       );
@@ -118,7 +120,7 @@ export function AddCertificateDialog({ open, onOpenChange, onAdd }: AddCertifica
     finally {
       setLoading(false);
     }
-  }, [selectedFile, certificateName, certificateDescription, userToken, onAdd, onOpenChange]);
+  }, [selectedFile, certificateName, certificateDescription, userToken, onAdd, onOpenChange,i18n.language]);
 
   return (
    <>
@@ -127,7 +129,7 @@ export function AddCertificateDialog({ open, onOpenChange, onAdd }: AddCertifica
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-white p-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Certifications</h2>
+            <h2 className="text-xl font-semibold">{t('Sidebar.Cert_Add_Dialog.header')}</h2>
           </div>
 
           {error && <p className="text-red-500">{error}</p>}
@@ -142,7 +144,7 @@ export function AddCertificateDialog({ open, onOpenChange, onAdd }: AddCertifica
           </div>
 
           <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700">Certificate Name</label>
+            <label className="block text-sm font-medium text-gray-700">{t('Sidebar.Cert_Add_Dialog.Certificate_Name')}</label>
             <Input
               type="text"
               value={certificateName}
@@ -152,7 +154,7 @@ export function AddCertificateDialog({ open, onOpenChange, onAdd }: AddCertifica
           </div>
 
           <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700">Certificate Description</label>
+            <label className="block text-sm font-medium text-gray-700">{t('Sidebar.Cert_Add_Dialog.Certificate_Description')}</label>
             <Input
               value={certificateDescription}
               onChange={(e) => setCertificateDescription(e.target.value)}
@@ -167,14 +169,14 @@ export function AddCertificateDialog({ open, onOpenChange, onAdd }: AddCertifica
               className="bg-white hover:bg-gray-100"
               disabled={loading}
             >
-              Cancel
+              {t('Sidebar.Cert_Add_Dialog.Cancel')}
             </Button>
             <Button
               onClick={handleUpload}
               className="bg-gray-900 hover:bg-gray-800"
               disabled={!selectedFile || !certificateName.trim() || !certificateDescription.trim() || loading}
             >
-              {loading ? "Uploading..." : "Upload Certificate"}
+              {loading ? t('Sidebar.Cert_Add_Dialog.Uploading_Cert'): t('Sidebar.Cert_Add_Dialog.Upload_Certificate')}
             </Button>
           </div>
         </DialogContent>

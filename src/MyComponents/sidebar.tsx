@@ -10,6 +10,7 @@ import { UserContext } from "@/Contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 import { IUser } from "@/interfaces";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useTranslation } from "react-i18next";
 
 export interface EngineerType {
   id: number;
@@ -20,6 +21,7 @@ export interface EngineerType {
 }
 
 export function Sidebar() {
+  const{t,i18n}=useTranslation();
   const [isCertificationsDialogOpen, setIsCertificationsDialogOpen] = useState(false);
   const [isCertificationsEditDialogOpen, setIsCertificationsEditDialogOpen] = useState(false);
   const [isDeleteCertDialogOpen, setIsDeleteCertDialogOpen] = useState(false);
@@ -45,6 +47,7 @@ export function Sidebar() {
   };
 
   let user_type = localStorage.getItem("user-type");
+  console.log("user-type",user_type);
   user_type = user_type ? user_type.replace(/\s+/g, "-") : null;
   const userContext = useContext(UserContext);
   if (!userContext) {
@@ -63,6 +66,8 @@ export function Sidebar() {
         `${pathUrl}/api/v1/certificate/${id}`,
         {
           headers: {
+            // 'Accept-Language': 'en',
+            'Accept-Language': i18n.language,
             Authorization: `Bearer ${userToken}`,
           },
         }
@@ -113,12 +118,26 @@ export function Sidebar() {
   };
 
   const getUserData = async () => {
+
+    let apiUrl;
+    let user_type = localStorage.getItem("user-type")?.trim();  
+    
+    if (user_type === "عامل فني" || user_type === "technical worker") {
+      apiUrl = `${pathUrl}/api/v1/technical-workers/user?userId=${userId || localStorage.getItem("user-id")}`;
+    } else {
+      apiUrl = `${pathUrl}/api/v1/engineers/user?userId=${userId || localStorage.getItem("user-id")}`;
+    }
+    
+    console.log(apiUrl);
     setIsLoadingUserData(true); // Set loading to true before fetching data
-    const response = await axios.get(
-      `${pathUrl}/api/v1/${user_type}s/user?userId=${userId || localStorage.getItem("user-id")}`,
+    const response = await axios.get(apiUrl,
+      // `${pathUrl}/api/v1/${user_type}s/user?userId=${userId || localStorage.getItem("user-id")}`,
+      // `${pathUrl}/api/v1/	engineers/user?userId=${userId || localStorage.getItem("user-id")}`,
+      // `${pathUrl}/api/v1/	technical-workers/user?userId=${userId || localStorage.getItem("user-id")}`,
+
       {
         headers: {
-          "Accept-Language": "en",
+          "Accept-Language": i18n.language,
           Authorization: `Bearer ${userToken}`,
         },
       }
@@ -135,7 +154,8 @@ export function Sidebar() {
     try {
       const response = await axios.get(`${pathUrl}/api/v1/certificate/user-certificates`, {
         headers: {
-          "Accept-Language": "en",
+          // "Accept-Language": "en",
+          "Accept-Language": i18n.language,
           Authorization: `Bearer ${userToken}`,
         },
       });
@@ -152,17 +172,24 @@ export function Sidebar() {
         throw new Error("An unexpected error occurred");
       }
     }
-  }, [userToken, pathUrl]);
+  }, [userToken, pathUrl,i18n.language]);
+  console.log("user_type befor del",user_type);
 
   const handleDeleteServ = async () => {
+    console.log("userData?.id",userData?.id);
+    console.log("selectedServ",selectedServ);
+
     if (!selectedServ) {
       console.error("Error: No valid service selected for deletion.");
       return;
     }
-
     try {
       await axios.delete(
-        `${pathUrl}/api/v1/${user_type}-services/service?${user_type === 'technical-worker' ? 'workerId' : 'engineerId'}=${userData?.id}&serviceId=${selectedServ.id}`,
+        // `${pathUrl}/api/v1/${user_type}-services/service?${user_type === 'technical-worker' ? 'workerId' : 'engineerId'}=${userData?.id}&serviceId=${selectedServ.id}`,
+        `${pathUrl}/api/v1/${user_type === 'technical-worker'||user_type === 'عامل-فني' ? 'technical-worker' : 'engineer'}-services/service?${user_type === 'technical-worker'||user_type === 'عامل-فني'?'workerId':'engineerId'}=${userData?.id}&serviceId=${selectedServ.id}`,
+
+        // {{base_url}}/api/v1/engineer-services/service?engineerId=2&serviceId=45
+        // {{base_url}}/api/v1/technical-worker-services/service?workerId=2&serviceId=3
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -178,7 +205,7 @@ export function Sidebar() {
 
   useEffect(() => {
     getCertifications();
-  }, [userToken, pathUrl, getCertifications]);
+  }, [userToken, pathUrl, getCertifications,i18n.language]);
 
   useEffect(() => {
     // Reset state when userId or userToken changes
@@ -200,11 +227,11 @@ export function Sidebar() {
   const services = engineerServ ? engineerServ : workerServs ? workerServs : [];
 
   if (isLoading ) {
-    return <div>Loading...</div>; // Show a loading state
+    return <div>{t('Sidebar.Loading')}</div>; // Show a loading state
   }
 
   return (
-    <div className="relative w-full shrink-0 bg-white pt-24 md:w-[320px]" key={userId}>
+    <div className="relative w-full shrink-0 bg-white pt-24 md:w-[320px] " key={userId}>
       {/* Use the propUserId as a key to force remount when it changes */}
       <div className="absolute -top-20 left-1/2 h-40 w-40 -translate-x-1/2 transform">
         <div className="h-full w-full overflow-hidden rounded-full border-4 border-white">
@@ -236,14 +263,14 @@ export function Sidebar() {
         </div>
         <Link to="/edit_profile">
           <Button variant="outline" size="sm" className="mt-2 w-full rounded-lg text-[18px] py-5 primary-grad hover:text-white">
-            Edit Profile
+            {t('Sidebar.Edit_Profile')}
           </Button>
         </Link>
       </div>
 
       <div className="space-y-4 p-4">
         <div className="rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md">
-          <h3 className="text-sm font-medium">Links</h3>
+          <h3 className="text-sm font-medium">{t('Sidebar.Links')}</h3>
           <div className="mt-2 space-y-1 text-sm text-gray-500 flex flex-col">
             {!linkedin && !behance ? (
               "No Available Links"
@@ -257,7 +284,7 @@ export function Sidebar() {
         </div>
 
         <div className="rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md">
-          <h3 className="text-sm font-medium">Bio</h3>
+          <h3 className="text-sm font-medium">{t('Sidebar.Bio')}</h3>
           <div className="mt-2 text-sm text-gray-600">
             {bio ? bio : "No Available Bio"}
           </div>
@@ -265,19 +292,20 @@ export function Sidebar() {
 
         <div className="rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium">Services</h3>
+            <h3 className="text-sm font-medium">{t('Sidebar.Services')}</h3>
             <button
               onClick={() => setIsServicesDialogOpen(true)}
               className="flex items-center text-xs text-gray-500 transition-colors hover:text-primary"
             >
               <Plus className="mr-1 h-3 w-3" />
-              Add Services
+              {t('Sidebar.Add_Services')}
             </button>
           </div>
           <ul className="mt-2 space-y-2">
             {services.map((service, i) => (
               <li key={i} className="flex items-center justify-between text-sm text-gray-600">
-                <span>• {service.name}</span>
+                {/* <span>• {service.name}</span> */}
+                <span>• {i18n.language === 'ar' ? service.nameAr : service.nameEn}</span>
                 <button
                   onClick={() => {
                     setIsDeleteServDialogOpen(true);
@@ -294,13 +322,13 @@ export function Sidebar() {
 
         <div className="rounded-lg border border-gray-200 p-4 transition-all hover:shadow-md">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium">Certifications</h3>
+            <h3 className="text-sm font-medium">{t('Sidebar.Certifications')}</h3>
             <button
               onClick={() => setIsCertificationsDialogOpen(true)}
               className="flex items-center text-xs text-gray-500 transition-colors hover:text-primary"
             >
               <Plus className="mr-1 h-3 w-3" />
-              Add Certifications
+              {t('Sidebar.Add_Certifications')}
             </button>
           </div>
           <ul className="mt-2 space-y-2">
@@ -312,7 +340,7 @@ export function Sidebar() {
                     onClick={() => handleEditClick(cert.id)}
                     className="p-1 transition-colors hover:text-primary"
                   >
-                    Edit
+                    {t('Sidebar.Edit_Certifications')}
                   </button>
                   <button
                     onClick={() => {
@@ -359,9 +387,9 @@ export function Sidebar() {
         onOpenChange={setIsDeleteCertDialogOpen}
       >
         <DialogContent className="max-w-sm p-6">
-          <h2 className="text-xl font-semibold">Delete Certification</h2>
+          <h2 className="text-xl font-semibold">{t('Sidebar.Cert_Dele_DialogContent.header')}</h2>
           <p className="mt-4">
-            Are you sure you want to delete this certification?
+          {t('Sidebar.Cert_Dele_DialogContent.Description')}
           </p>
           <div className="mt-6 flex justify-end space-x-3">
             <Button
@@ -369,13 +397,13 @@ export function Sidebar() {
               variant="ghost"
               className="bg-white hover:bg-gray-100"
             >
-              Cancel
+              {t('Sidebar.Cert_Dele_DialogContent.Cancel')}
             </Button>
             <Button
               onClick={handleDeleteCert}
               className="bg-red-600 hover:bg-red-500 text-white"
             >
-              Delete
+              {t('Sidebar.Cert_Dele_DialogContent.Delete')}
             </Button>
           </div>
         </DialogContent>
@@ -386,21 +414,21 @@ export function Sidebar() {
         onOpenChange={setIsDeleteServDialogOpen}
       >
         <DialogContent className="max-w-sm p-6">
-          <h2 className="text-xl font-semibold">Delete Services</h2>
-          <p className="mt-4">Are you sure you want to delete this service?</p>
+          <h2 className="text-xl font-semibold">{t('Sidebar.Services_Dele_DialogContent.header')}</h2>
+          <p className="mt-4">{t('Sidebar.Services_Dele_DialogContent.Description')}</p>
           <div className="mt-6 flex justify-end space-x-3">
             <Button
               onClick={() => setIsDeleteServDialogOpen(false)}
               variant="ghost"
               className="bg-white hover:bg-gray-100"
             >
-              Cancel
+              {t('Sidebar.Services_Dele_DialogContent.Cancel')}
             </Button>
             <Button
               onClick={handleDeleteServ}
               className="bg-red-600 hover:bg-red-500 text-white"
             >
-              Delete
+              {t('Sidebar.Services_Dele_DialogContent.Delete')}
             </Button>
           </div>
         </DialogContent>

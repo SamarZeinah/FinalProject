@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { useTranslation } from "react-i18next"
 
 interface IProps {
   showConfirmDialog: boolean
@@ -30,6 +31,7 @@ export default function ConfirmDialog({
   cancelText,
   isLoading,
 }: IProps) {
+  const{t}=useTranslation()
   return (
     <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
       <DialogContent>
@@ -45,10 +47,10 @@ export default function ConfirmDialog({
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Loading...
+                {t('addProject.sending')}
               </>
             ) : (
-              confirmText
+              t('addProject.ConfirmDialog_confirmText')
             )}
           </Button>
         </DialogFooter>

@@ -21,10 +21,51 @@ import ProfileEditor from "./Pages/profile-editor";
 import Profile from "./Pages/profile";
 import Project from "./Pages/project";
 
+import { I18nextProvider } from "react-i18next";
+//i18n
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
+import LanguageDetector from 'i18next-browser-languagedetector';
+import HttpApi from 'i18next-http-backend';
+import { useEffect } from "react";
+import cookies from 'js-cookie';
+import ProductList from "./Pages/ProductList";
+import EditProduct from "./Pages/JoinUs/EditProduct";
+import AddProduct from "./Pages/AddProduct";
+
+
+i18n
+  .use(initReactI18next)
+  .use(LanguageDetector)
+  .use(HttpApi)
+  .init({
+    fallbackLng: "en",
+    detection: {
+      order: ['cookie','htmlTag', 'localStorage', 'sessionStorage', 'navigator', 'path', 'subdomain'],
+      caches: ["cookie"],
+    },
+    backend: {
+      loadPath: '/locale/{{lng}}/{{ns}}.json',
+    }
+  });
+
+
+
+
+
+
 // Initialize QueryClient outside the component
 const queryClient = new QueryClient();
 
 function App() {
+  
+    const { t } = useTranslation();
+    const lng=cookies.get("i18next")||"en";
+    useEffect(()=>{
+        window.document.dir=i18n.dir();
+      },[lng])
+
+
   const routes = createBrowserRouter([
     {
       path: "",
@@ -46,6 +87,7 @@ function App() {
             </ProtectedRoute>
           ),
         },
+        
         {
           index: true,
           element: (
@@ -78,6 +120,32 @@ function App() {
             </ProtectedRoute>
           ),
         },
+        // new
+        {
+          path: "addproduct",
+          element: (
+            <ProtectedRoute>
+              <AddProduct />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "editproduct/:productId",
+          element: (
+            <ProtectedRoute>
+              <EditProduct />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "productlist",
+          element: (
+            <ProtectedRoute>
+              <ProductList />
+            </ProtectedRoute>
+          ),
+        },
+
         {
           path: "client",
           element: <Client />,
@@ -99,9 +167,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-
       <UserContextProvider>
-        <RouterProvider router={routes} />
+        <I18nextProvider i18n={i18n}>
+          <RouterProvider router={routes} />
+        </I18nextProvider>
       </UserContextProvider>
     </QueryClientProvider>
   );

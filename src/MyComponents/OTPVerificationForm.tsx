@@ -1,8 +1,10 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useEffect, useContext, useTransition } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Loader2, AlertCircle } from 'lucide-react';
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
+import { useTranslation } from 'react-i18next';
+
 import {
   InputOTP,
   InputOTPGroup,
@@ -33,7 +35,7 @@ export function OTPVerificationForm({
     throw new Error("UserContext must be used within a UserContextProvider");
   }
   const { setIsMakeOtp } = userContext;
-
+  const{t}=useTranslation();
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -101,7 +103,7 @@ export function OTPVerificationForm({
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Verifying...
+                {t('forgot_password.load_verification_buttonText')}
               </>
             ) : (
               buttonText
@@ -112,3 +114,5 @@ export function OTPVerificationForm({
     </Card>
   );
 }
+
+

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { FormikErrors, FormikTouched, useFormik } from "formik";
+import { type FormikErrors, type FormikTouched, useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
@@ -17,7 +17,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Combobox } from "@/components/ui/combobox";
 import { UserContext } from "@/Contexts/UserContext";
+import { useTranslation } from "react-i18next";
 
+// Interface definitions
 interface ITechnicalWorkerForm {
   technicalWorker: {
     type: {
@@ -44,6 +46,7 @@ interface IBusinessFormValues {
   bioAr: string;
   bioEn: string;
   businessTypes: Array<{ id: number }>;
+  [key: string]: string | Array<{ id: number }> | undefined;
 }
 
 interface IStoreForm {
@@ -64,6 +67,114 @@ interface IExhibitionForm {
   };
 }
 
+interface IUserTypes {
+  id: number;
+  code: string;
+  name: string;
+}
+
+interface ILocation {
+  id: number;
+  code: string;
+  name: string;
+}
+
+interface IEngineerForm {
+  engineer: {
+    type: {
+      id: number;
+    };
+    yearsOfExperience: string;
+    engineerServ: Array<{ id: number }>;
+  };
+}
+
+interface IDataToSend {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  userType: { id: number; code: string };
+  phone?: string;
+  rePassword?: string;
+  governorate?: { id: number };
+  city?: { id: number };
+  engineer?: {
+    type: { id: number };
+    yearsOfExperience: number;
+    engineerServ: Array<{ id: number }>;
+  };
+  technicalWorker?: {
+    type: { id: number };
+    yearsOfExperience: number;
+    workerServs: Array<{ id: number }>;
+  };
+  business?: {
+    userType: { id: number };
+    tradName: string;
+    bioAr: string;
+    bioEn: string;
+    businessTypes: Array<{ id: number }>;
+  };
+  engineeringOffice?: {
+    tradeName: string;
+    description: string;
+    engineeringOfficeField: { id: number };
+    engineeringOfficeDepartments: Array<{ id: number }>;
+  };
+}
+
+// NEW CODE START - Engineering Office interfaces..........................
+interface IEngineeringOfficeField {
+  id: number;
+  name: string;
+}
+
+interface IEngineeringOfficeDepartment {
+  id: number;
+  name: string;
+}
+
+// In the IEngineeringOfficeForm interface, change engineerServ to engineeringOfficeDepartments
+interface IEngineeringOfficeForm {
+  engineeringOffice: {
+    tradeName: string;
+    description: string;
+    engineeringOfficeField: { id: number };
+    engineeringOfficeDepartments: Array<{ id: number }>;
+  };
+}
+// NEW CODE END.............................................
+
+type FormValues = IEngineerForm &
+  ITechnicalWorkerForm & { store: IBusinessFormValues } & {
+    exhibition: IBusinessFormValues;
+  } & IEngineeringOfficeForm;
+
+interface IGovernorate {
+  id: number;
+  code?: string;
+  name: string;
+}
+
+interface ICity {
+  id: number;
+  code?: string;
+  name: string;
+}
+
+interface NestedObject {
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | NestedObject
+    | Array<NestedObject | string | number | boolean | null>
+    | null
+    | undefined;
+}
+
+// Background slider component
 const BackgroundSlider = () => {
   const images = [
     "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&auto=format&fit=crop&q=60",
@@ -79,7 +190,7 @@ const BackgroundSlider = () => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [images.length]); // Removed unnecessary dependency: images.length
+  }, [images.length]);
 
   return (
     <div className="relative w-full h-full overflow-hidden">
@@ -100,7 +211,9 @@ const BackgroundSlider = () => {
   );
 };
 
+// Company animation component
 const CompanyAnimation = () => {
+  const { t } = useTranslation();
   return (
     <div className="relative w-full h-full overflow-hidden">
       <BackgroundSlider />
@@ -132,129 +245,31 @@ const CompanyAnimation = () => {
           transition={{ duration: 1, delay: 0.5 }}
           className="text-center text-white"
         >
-          <h2 className="text-4xl font-bold mb-4">Welcome to Our Platform</h2>
-          <p className="text-xl">
-            Register your company and start growing your business today
-          </p>
+          <h2 className="text-4xl font-bold mb-4">{t("Company.photo_head")}</h2>
+          <p className="text-xl">{t("Company.photo_Dec")}</p>
         </motion.div>
       </div>
     </div>
   );
 };
 
-interface IUserTypes {
-  id: number;
-  code: string;
-  name: string;
-}
-
-interface ILocation {
-  id: number;
-  code: string;
-  name: string;
-}
-
-interface IEngineerForm {
-  engineer: {
-    type: {
-      id: number;
-    };
-    yearsOfExperience: string;
-    engineerServ: Array<{ id: number }>;
-  };
-}
-
-type FormValues = IEngineerForm &
-  ITechnicalWorkerForm & { store: IBusinessFormValues } & {
-    exhibition: IBusinessFormValues;
-  };
-
-const validationSchema = Yup.object().shape({
-  engineer: Yup.object().shape({
-    type: Yup.object().shape({
-      id: Yup.number().required("Engineer type is required"),
-    }),
-    yearsOfExperience: Yup.string()
-      .required("Years of experience is required")
-      .test(
-        "is-number",
-        "Must be a valid number",
-        (value) => !isNaN(Number(value))
-      ),
-    engineerServ: Yup.array()
-      .of(
-        Yup.object().shape({
-          id: Yup.number().required(),
-        })
-      )
-      .min(1, "At least one engineer service is required"),
-  }),
-
-  technicalWorker: Yup.object().when("userType.code", {
-    is: "TECHNICAL_WORKER",
-    then: () =>
-      Yup.object().shape({
-        type: Yup.object().shape({
-          id: Yup.number().required("Technical worker type is required"),
-        }),
-        yearsOfExperience: Yup.string()
-          .required("Years of experience is required")
-          .test(
-            "is-number",
-            "Must be a valid number",
-            (value) => !isNaN(Number(value))
-          ),
-        workerServs: Yup.array()
-          .of(
-            Yup.object().shape({
-              id: Yup.number().required(),
-            })
-          )
-          .min(1, "At least one technical worker service is required"),
-      }),
-    otherwise: () => Yup.object().strip(),
-  }),
-  userType: Yup.object().shape({
-    id: Yup.number().required("User type is required"),
-    code: Yup.string().required("User type code is required"),
-  }),
-  store: Yup.object().when("userType.code", {
-    is: "STORE",
-    then: () =>
-      Yup.object().shape({
-        tradName: Yup.string().required("Trade name is required"),
-        bioAr: Yup.string().required("Arabic bio is required"),
-        bioEn: Yup.string().required("English bio is required"),
-        businessTypes: Yup.array().min(
-          1,
-          "At least one business type is required"
-        ),
-      }),
-    otherwise: () => Yup.object().strip(),
-  }),
-  exhibition: Yup.object().when("userType.code", {
-    is: "EXHIBITION",
-    then: () =>
-      Yup.object().shape({
-        tradName: Yup.string().required("Trade name is required"),
-        bioAr: Yup.string().required("Arabic bio is required"),
-        bioEn: Yup.string().required("English bio is required"),
-        businessTypes: Yup.array().min(
-          1,
-          "At least one business type is required"
-        ),
-      }),
-    otherwise: () => Yup.object().strip(),
-  }),
-});
-
+// Alert component with auto-hide functionality
 const Alert = ({
   message,
   type,
+  onClose,
 }: {
   message: string;
   type: "success" | "error";
+  onClose: () => void;
 }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -50 }}
@@ -269,35 +284,7 @@ const Alert = ({
   );
 };
 
-interface IDataToSend {
-  userType: { id: number; code: string };
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  password: string;
-  rePassword?: string;
-  engineer?: {
-    type: { id: number };
-    yearsOfExperience: number;
-    engineerServ: Array<{ id: number }>;
-  };
-  technicalWorker?: {
-    type: { id: number };
-    yearsOfExperience: number;
-    workerServs: Array<{ id: number }>;
-  };
-  business?: {
-    userType: { id: number };
-    tradName: string;
-    bioAr: string;
-    bioEn: string;
-    businessTypes: Array<{ id: number }>;
-  };
-  governorate?: { id: number };
-  city?: { id: number };
-}
-
+// Main Company component
 export default function Company() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -307,12 +294,23 @@ export default function Company() {
     id: 0,
     code: "",
   });
+
+  // NEW CODE START - Engineering Office ..........................
+  // In the Company component, add these state variables after the existing state variables
+  const [engineeringOfficeFields, setEngineeringOfficeFields] = useState<
+    IEngineeringOfficeField[]
+  >([]);
+  const [engineeringOfficeDepartments, setEngineeringOfficeDepartments] =
+    useState<IEngineeringOfficeDepartment[]>([]);
+  // NEW CODE START - Engineering Office ..........................
+
   const [formData, setFormData] = useState<
     ISignUpForm &
       IEngineerForm &
       ITechnicalWorkerForm &
       IStoreForm &
-      IExhibitionForm
+      IExhibitionForm &
+      IEngineeringOfficeForm
   >({
     firstName: "",
     lastName: "",
@@ -343,6 +341,12 @@ export default function Company() {
       bioEn: "",
       businessTypes: [],
     },
+    engineeringOffice: {
+      tradeName: "",
+      description: "",
+      engineeringOfficeField: { id: 0 },
+      engineeringOfficeDepartments: [],
+    },
   });
   const [userTypes, setUserTypes] = useState<IUserTypes[]>([]);
   const [engineerTypes, setEngineerTypes] = useState<ILocation[]>([]);
@@ -358,13 +362,153 @@ export default function Company() {
     message: string;
     type: "success" | "error";
   } | null>(null);
+  const [governorates, setGovernorates] = useState<IGovernorate[]>([]);
+  const [cities, setCities] = useState<ICity[]>([]);
+  const [selectedGovernorate, setSelectedGovernorate] = useState<number | null>(
+    null
+  );
 
   const userContext = useContext(UserContext);
   if (!userContext) {
     throw new Error("UserContext must be used within a UserContextProvider");
   }
   const { pathUrl } = userContext;
+  const { t, i18n } = useTranslation();
 
+  // Engineer Validation schemas
+  const engineerValidationSchema = Yup.object().shape({
+    engineer: Yup.object().shape({
+      type: Yup.object().shape({
+        id: Yup.number().min(
+          1,
+          t("RegisterType.validationSchema.engineer.type")
+        ),
+      }),
+      yearsOfExperience: Yup.string()
+        .required(t("RegisterType.validationSchema.engineer.yearsOfExperience"))
+        .test(
+          "is-number",
+          t("RegisterType.validationSchema.engineer.yearsOfExperience_invalid"),
+          (value) => !isNaN(Number(value))
+        ),
+      engineerServ: Yup.array()
+        .of(
+          Yup.object().shape({
+            id: Yup.number().required(),
+          })
+        )
+        // .min(1, "At least one engineer service is required"),
+        .min(1, t("RegisterType.validationSchema.engineer.Engineer_Services")),
+    }),
+  });
+  //Worker Validation schemas
+  const technicalWorkerValidationSchema = Yup.object().shape({
+    technicalWorker: Yup.object().shape({
+      type: Yup.object().shape({
+        id: Yup.number().min(
+          1,
+          t("RegisterType.validationSchema.technicalWorker.type")
+        ),
+      }),
+      yearsOfExperience: Yup.string()
+        .required(
+          t("RegisterType.validationSchema.technicalWorker.yearsOfExperience")
+        )
+        .test(
+          "is-number",
+          t(
+            "RegisterType.validationSchema.technicalWorker.yearsOfExperience_invalid"
+          ),
+          (value) => !isNaN(Number(value))
+        ),
+      workerServs: Yup.array()
+        .of(
+          Yup.object().shape({
+            id: Yup.number().required(),
+          })
+        )
+        .min(
+          1,
+          t("RegisterType.validationSchema.technicalWorker.Worker_Services")
+        ),
+    }),
+  });
+  //Store Validation schemas
+  const storeValidationSchema = Yup.object().shape({
+    store: Yup.object().shape({
+      tradName: Yup.string().required(
+        t("RegisterType.validationSchema.businessEntity.tradName")
+      ),
+      bioAr: Yup.string().required(
+        t("RegisterType.validationSchema.businessEntity.bioAr")
+      ),
+      bioEn: Yup.string().required(
+        t("RegisterType.validationSchema.businessEntity.bioEn")
+      ),
+      businessTypes: Yup.array().min(
+        1,
+        t("RegisterType.validationSchema.businessEntity.businessTypes")
+      ),
+    }),
+  });
+  //exhibition Validation schemas
+  const exhibitionValidationSchema = Yup.object().shape({
+    exhibition: Yup.object().shape({
+      tradName: Yup.string().required(
+        t("RegisterType.validationSchema.businessEntity.tradName")
+      ),
+      bioAr: Yup.string().required(
+        t("RegisterType.validationSchema.businessEntity.bioAr")
+      ),
+      bioEn: Yup.string().required(
+        t("RegisterType.validationSchema.businessEntity.bioEn")
+      ),
+      businessTypes: Yup.array().min(
+        1,
+        t("RegisterType.validationSchema.businessEntity.businessTypes")
+      ),
+    }),
+  });
+
+  // NEW CODE START - Engineering Office ..........................
+  // Update the validation schema
+  const engineeringOfficeValidationSchema = Yup.object().shape({
+    engineeringOffice: Yup.object().shape({
+      tradeName: Yup.string().required(t("RegisterType.validationSchema.engineeringOffice.tradeName")),
+      description: Yup.string().required(t("RegisterType.validationSchema.engineeringOffice.description")),
+      engineeringOfficeField: Yup.object().shape({
+        id: Yup.number().min(1, t("RegisterType.validationSchema.engineeringOffice.engineeringOfficeField")),
+      }),
+      engineeringOfficeDepartments: Yup.array()
+        .of(
+          Yup.object().shape({
+            id: Yup.number().required(),
+          })
+        )
+        .min(1, t("RegisterType.validationSchema.engineeringOffice.engineeringOfficeDepartments")),
+    }),
+  });
+  // NEW CODE End- Engineering Office ..........................
+
+  // Get validation schema based on user type
+  const getValidationSchema = () => {
+    switch (userType.code) {
+      case "ENGINEER":
+        return engineerValidationSchema;
+      case "TECHNICAL_WORKER":
+        return technicalWorkerValidationSchema;
+      case "STORE":
+        return storeValidationSchema;
+      case "EXHIBITION":
+        return exhibitionValidationSchema;
+      case "ENGINEERING_OFFICE":
+        return engineeringOfficeValidationSchema;
+      default:
+        return Yup.object();
+    }
+  };
+
+  // Initialize Formik
   const formik = useFormik<FormValues>({
     initialValues: {
       engineer: {
@@ -389,29 +533,49 @@ export default function Company() {
         bioEn: "",
         businessTypes: [],
       },
+      engineeringOffice: {
+        tradeName: "",
+        description: "",
+        engineeringOfficeField: { id: 0 },
+        engineeringOfficeDepartments: [],
+      },
     },
-    validationSchema,
-    onSubmit: () => {}, // Empty function as we're handling submission manually
+    validationSchema: getValidationSchema(),
+    validateOnChange: true,
+    validateOnBlur: true,
+    validateOnMount: false,
+    onSubmit: (values) => {
+      handleSignUp(values);
+    },
   });
 
+  // Update validation schema when user type changes
+  useEffect(() => {
+    // We need to recreate the formik instance with the new validation schema
+    // This is handled by providing the validationSchema in the useFormik call
+    // The formik instance will update when userType changes because getValidationSchema() depends on userType
+  }, []); // Only depend on userType
+
+  // Fetch user types
   useEffect(() => {
     async function getUserTypes() {
       try {
         const { data } = await axios.get(`${pathUrl}/api/v1/user-types`, {
-          headers: { "Accept-Language": "en" },
+          headers: { "Accept-Language": i18n.language },
         });
         setUserTypes(data.data);
       } catch (error) {
         console.error("Error fetching User Types:", error);
         setAlert({
-          message: "Failed to fetch user types. Please try again.",
+          message: t("RegisterType.FetchError.user_types"),
           type: "error",
         });
       }
     }
     getUserTypes();
-  }, [pathUrl]);
+  }, [pathUrl, i18n.language]);
 
+  // Set user type from URL parameter
   useEffect(() => {
     if (userTypes.length > 0 && userTypeParam) {
       const matchedUserType = userTypes.find(
@@ -427,13 +591,12 @@ export default function Company() {
     }
   }, [userTypes, userTypeParam]);
 
+  // Fetch engineer types
   useEffect(() => {
     async function getEngineerTypes() {
       try {
         const { data } = await axios.get(`${pathUrl}/api/v1/engineer-types`, {
-          headers: {
-            "Accept-Language": "en",
-          },
+          headers: { "Accept-Language": i18n.language },
         });
         if (data.success) {
           setEngineerTypes(
@@ -451,15 +614,19 @@ export default function Company() {
         if (axios.isAxiosError(error) && error.response) {
           setAlert({
             message:
-              error.response.data.message || "Error fetching engineer types:",
+              error.response.data.message ||
+              t("RegisterType.FetchError.engineer_types"),
             type: "error",
           });
         }
       }
     }
-    getEngineerTypes();
-  }, [pathUrl]);
+    if (userType.code === "ENGINEER") {
+      getEngineerTypes();
+    }
+  }, [pathUrl, userType.code, i18n.language]);
 
+  // Fetch engineer services
   useEffect(() => {
     async function getEngineerServices(engineerTypeId: number) {
       try {
@@ -467,7 +634,7 @@ export default function Company() {
           `${pathUrl}/api/v1/engineer-services/service/${engineerTypeId}`,
           {
             headers: {
-              "Accept-Language": "en",
+              "Accept-Language": i18n.language,
             },
           }
         );
@@ -485,7 +652,7 @@ export default function Company() {
       } catch (error) {
         console.error("Error fetching engineer services:", error);
         setAlert({
-          message: "Failed to fetch engineer services. Please try again.",
+          message: t("RegisterType.FetchError.engineer_services"),
           type: "error",
         });
       }
@@ -493,8 +660,9 @@ export default function Company() {
     if (formik.values.engineer.type.id) {
       getEngineerServices(formik.values.engineer.type.id);
     }
-  }, [formik.values.engineer.type.id, pathUrl]);
+  }, [formik.values.engineer.type.id, pathUrl, i18n.language]);
 
+  // Fetch technical worker types
   useEffect(() => {
     async function getTechnicalWorkerTypes() {
       try {
@@ -502,7 +670,7 @@ export default function Company() {
           `${pathUrl}/api/v1/technical-worker-types`,
           {
             headers: {
-              "Accept-Language": "en",
+              "Accept-Language": i18n.language,
             },
           }
         );
@@ -520,14 +688,17 @@ export default function Company() {
       } catch (error) {
         console.error("Error fetching technical worker types:", error);
         setAlert({
-          message: "Failed to fetch technical worker types. Please try again.",
+          message: t("RegisterType.FetchError.worker_types"),
           type: "error",
         });
       }
     }
-    getTechnicalWorkerTypes();
-  }, [pathUrl]);
+    if (userType.code === "TECHNICAL_WORKER") {
+      getTechnicalWorkerTypes();
+    }
+  }, [pathUrl, userType.code, i18n.language]);
 
+  // Fetch technical worker services
   useEffect(() => {
     async function getTechnicalWorkerServices(technicalWorkerTypeId: number) {
       try {
@@ -535,7 +706,7 @@ export default function Company() {
           `${pathUrl}/api/v1/technical-worker-services/service/${technicalWorkerTypeId}`,
           {
             headers: {
-              "Accept-Language": "en",
+              "Accept-Language": i18n.language,
             },
           }
         );
@@ -545,8 +716,7 @@ export default function Company() {
       } catch (error) {
         console.error("Error fetching technical worker services:", error);
         setAlert({
-          message:
-            "Failed to fetch technical worker services. Please try again.",
+          message: t("RegisterType.FetchError.worker_services"),
           type: "error",
         });
       }
@@ -554,17 +724,17 @@ export default function Company() {
     if (formik.values.technicalWorker.type.id) {
       getTechnicalWorkerServices(formik.values.technicalWorker.type.id);
     }
-  }, [formik.values.technicalWorker.type.id, pathUrl]);
+  }, [formik.values.technicalWorker.type.id, pathUrl, i18n.language]);
 
+  // Fetch business types
   useEffect(() => {
     async function getBusinessTypes() {
-      console.log("userTypeId-----=>  ",userType.id,userType.code)
       try {
         const { data } = await axios.get(
           `${pathUrl}/api/v1/business-types/user-type/${userType.id}`,
           {
             headers: {
-              "Accept-Language": "en",
+              "Accept-Language": i18n.language,
             },
           }
         );
@@ -574,15 +744,152 @@ export default function Company() {
       } catch (error) {
         console.error("Error fetching business types:", error);
         setAlert({
-          message: "Failed to fetch business types. Please try again.",
+          message: t("RegisterType.FetchError.business_types"),
           type: "error",
         });
       }
     }
-    if (userType.code === "STORE" || userType.code === "EXHIBITION") {
+    if (
+      (userType.code === "STORE" || userType.code === "EXHIBITION") &&
+      userType.id > 0
+    ) {
       getBusinessTypes();
     }
-  }, [userType, pathUrl]); // Added pathUrl as a dependency
+  }, [userType, pathUrl, i18n.language]);
+
+  // Fetch governorates
+  useEffect(() => {
+    async function getGovernorates() {
+      try {
+        const { data } = await axios.get(`${pathUrl}/api/v1/governorates`, {
+          headers: {
+            "Accept-Language": i18n.language,
+          },
+        });
+        if (data.success) {
+          setGovernorates(
+            data.data.map(
+              (item: { id: number; code?: string; name: string }) => ({
+                id: item.id,
+                code: item.code || "",
+                name: item.name,
+              })
+            )
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching governorates:", error);
+        setAlert({
+          message: t("RegisterType.FetchError.governorates"),
+          type: "error",
+        });
+      }
+    }
+    getGovernorates();
+  }, [pathUrl, i18n.language]);
+
+  // Fetch cities based on selected governorate
+  useEffect(() => {
+    async function getCities(governorateId: number) {
+      try {
+        const { data } = await axios.get(
+          `${pathUrl}/api/v1/cities/governorate/${governorateId}`,
+          {
+            headers: {
+              "Accept-Language": i18n.language,
+            },
+          }
+        );
+        if (data.success) {
+          setCities(
+            data.data.map(
+              (item: { id: number; code?: string; name: string }) => ({
+                id: item.id,
+                code: item.code || "",
+                name: item.name,
+              })
+            )
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+        setAlert({
+          message: t("RegisterType.FetchError.cities"),
+          type: "error",
+        });
+      }
+    }
+
+    if (selectedGovernorate) {
+      getCities(selectedGovernorate);
+    } else {
+      setCities([]);
+    }
+  }, [selectedGovernorate, pathUrl, i18n.language]);
+
+
+
+
+  // NEW CODE START - Engineering Office ..........................
+  // Add these useEffect hooks after the existing useEffect hooks
+  useEffect(() => {
+    async function getEngineeringOfficeFields() {
+      try {
+        const { data } = await axios.get(
+          `${pathUrl}/api/v1/engineering-office-field`,
+          {
+            headers: {
+              "Accept-Language": i18n.language,
+            },
+          }
+        );
+        if (data.success) {
+          setEngineeringOfficeFields(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching engineering office fields:", error);
+        setAlert({
+          message:
+          t("RegisterType.FetchError.engineeringOffice"),
+          type: "error",
+        });
+      }
+    }
+    if (userType.code === "ENGINEERING_OFFICE") {
+      getEngineeringOfficeFields();
+    }
+  }, [pathUrl, userType.code,i18n.language]);
+
+  useEffect(() => {
+    async function getEngineeringOfficeDepartments(fieldId: number) {
+      try {
+        const { data } = await axios.get(
+          `${pathUrl}/api/v1/engineering-office-department/field/${fieldId}`,
+          {
+            headers: {
+              "Accept-Language": i18n.language,
+            },
+          }
+        );
+        if (data.success) {
+          setEngineeringOfficeDepartments(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching engineering office departments:", error);
+        setAlert({
+          message:
+          t("RegisterType.FetchError.engineeringOfficeDepartments"),
+          type: "error",
+        });
+      }
+    }
+    if (formik.values.engineeringOffice.engineeringOfficeField.id) {
+      getEngineeringOfficeDepartments(
+        formik.values.engineeringOffice.engineeringOfficeField.id
+      );
+    }
+  }, [formik.values.engineeringOffice.engineeringOfficeField.id, pathUrl,i18n.language]);
+  // NEW CODE START - Engineering Office ..........................
 
   const {
     handleSubmit,
@@ -592,6 +899,8 @@ export default function Company() {
     errors,
     touched,
     setFieldValue,
+    setFieldTouched,
+    validateForm,
   } = formik;
 
   const formKey = userType.code.toLowerCase() as keyof FormValues;
@@ -599,9 +908,76 @@ export default function Company() {
   const formErrors = errors[formKey] as FormikErrors<IBusinessFormValues>;
   const formTouched = touched[formKey] as FormikTouched<IBusinessFormValues>;
 
+  // Handle first step form submission
+  const handleRegisterFormSubmit = async (values: ISignUpForm) => {
+    return new Promise<void>((resolve, reject) => {
+      // Check if governorate is selected but city is not
+      if (values.governorate?.id && (!values.city || !values.city.id)) {
+        reject(new Error("Please select a city for the chosen governorate"));
+        return;
+      }
+
+      setFormData((prevData) => ({ ...prevData, ...values }));
+      setCurrentStep(2);
+      resolve();
+    }).catch((error) => {
+      setAlert({
+        message: error.message,
+        type: "error",
+      });
+      throw error; // Re-throw to prevent form submission
+    });
+  };
+
+  // Touch all fields in a nested object
+  const touchAllFields = (obj: NestedObject, prefix = "") => {
+    if (!obj) return;
+
+    Object.keys(obj).forEach((key) => {
+      const path = prefix ? `${prefix}.${key}` : key;
+
+      if (
+        typeof obj[key] === "object" &&
+        obj[key] !== null &&
+        !Array.isArray(obj[key])
+      ) {
+        touchAllFields(obj[key] as NestedObject, path);
+      } else {
+        setFieldTouched(path, true, false);
+      }
+    });
+  };
+
+  // Handle signup form submission
   async function handleSignUp(values: FormValues) {
+    // Validate form
+    const validationErrors = await validateForm();
+
+    // If there are validation errors, touch all fields to show error messages
+    if (Object.keys(validationErrors).length > 0) {
+      // Touch all fields based on user type
+      if (userType.code === "ENGINEER") {
+        touchAllFields(values.engineer, "engineer");
+      } else if (userType.code === "TECHNICAL_WORKER") {
+        touchAllFields(values.technicalWorker, "technicalWorker");
+      } else if (userType.code === "STORE") {
+        touchAllFields(values.store, "store");
+      } else if (userType.code === "EXHIBITION") {
+        touchAllFields(values.exhibition, "exhibition");
+      } else if (userType.code === "ENGINEERING_OFFICE") {
+        touchAllFields(values.engineeringOffice, "engineeringOffice");
+      }
+
+      setAlert({
+        message: "Please fill in all required fields",
+        type: "error",
+      });
+      return;
+    }
+
     setIsLoading(true);
     setAlert(null);
+
     try {
       const baseData = {
         ...formData,
@@ -616,6 +992,10 @@ export default function Company() {
         userType: baseData.userType,
         ...(baseData.phone && { phone: baseData.phone }),
         ...(baseData.rePassword && { rePassword: baseData.rePassword }),
+        ...(formData.governorate && {
+          governorate: { id: formData.governorate.id },
+        }),
+        ...(formData.city && { city: { id: formData.city.id } }),
       };
 
       if (userType.code === "ENGINEER") {
@@ -642,6 +1022,24 @@ export default function Company() {
         };
       }
 
+
+
+      // NEW CODE START - Engineering Office ..........................
+      // Update the handleSignUp function to include the engineeringOffice data
+      // Find the section where dataToSend is being constructed and add this case:
+      if (userType.code === "ENGINEERING_OFFICE") {
+        dataToSend.engineeringOffice = {
+          tradeName: values.engineeringOffice.tradeName,
+          description: values.engineeringOffice.description,
+          engineeringOfficeField: {
+            id: values.engineeringOffice.engineeringOfficeField.id,
+          },
+          engineeringOfficeDepartments:
+            values.engineeringOffice.engineeringOfficeDepartments,
+        };
+      }
+      // NEW CODE START - Engineering Office ..........................
+
       if (!dataToSend.governorate?.id) delete dataToSend.governorate;
       if (!dataToSend.city?.id) delete dataToSend.city;
       if (!dataToSend.phone) delete dataToSend.phone;
@@ -654,10 +1052,11 @@ export default function Company() {
         dataToSend,
         {
           headers: {
-            "Accept-Language": "en",
+            "Accept-Language": i18n.language,
           },
         }
       );
+
       console.log("API Response:", data.data);
       navigate(`/access-account/${dataToSend.email}`);
     } catch (error) {
@@ -674,14 +1073,6 @@ export default function Company() {
     }
   }
 
-  const handleRegisterFormSubmit = async (values: ISignUpForm) => {
-    return new Promise<void>((resolve) => {
-      setFormData((prevData) => ({ ...prevData, ...values }));
-      setCurrentStep(2);
-      resolve();
-    });
-  };
-
   return (
     <div className="flex min-h-screen">
       <div className="hidden md:block w-1/2 relative overflow-hidden">
@@ -690,7 +1081,13 @@ export default function Company() {
       <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-50 p-4">
         <Card className="w-full max-w-md p-6">
           <AnimatePresence>
-            {alert && <Alert message={alert.message} type={alert.type} />}
+            {alert && (
+              <Alert
+                message={alert.message}
+                type={alert.type}
+                onClose={() => setAlert(null)}
+              />
+            )}
           </AnimatePresence>
           <AnimatePresence mode="wait">
             {currentStep === 1 ? (
@@ -705,9 +1102,27 @@ export default function Company() {
                   userType={userType}
                   btnText="Next"
                   initialValues={formData}
-                  onChange={(values) =>
-                    setFormData((prevData) => ({ ...prevData, ...values }))
-                  }
+                  onChange={(values) => {
+                    // Prevent unnecessary re-renders by using a functional update
+                    setFormData((prevData) => {
+                      // Only update if there are actual changes
+                      if (
+                        JSON.stringify(prevData) ===
+                        JSON.stringify({ ...prevData, ...values })
+                      ) {
+                        return prevData;
+                      }
+
+                      // Update selectedGovernorate when governorate changes
+                      if (values.governorate?.id !== selectedGovernorate) {
+                        setSelectedGovernorate(values.governorate?.id || null);
+                      }
+
+                      return { ...prevData, ...values };
+                    });
+                  }}
+                  governorates={governorates}
+                  cities={cities}
                 />
               </motion.div>
             ) : (
@@ -719,11 +1134,12 @@ export default function Company() {
                 className="grid gap-4"
               >
                 <form onSubmit={handleSubmit} className="grid gap-4">
+                  {/* Engineer or Technical Worker Form */}
                   {(userType.code === "ENGINEER" ||
                     userType.code === "TECHNICAL_WORKER") && (
                     <div className="grid gap-2">
                       <Label htmlFor="yearsOfExperience">
-                        Years of Experience
+                        {t("RegisterType.Years_of_Experience")}
                       </Label>
                       <Input
                         id="yearsOfExperience"
@@ -766,10 +1182,13 @@ export default function Company() {
                     </div>
                   )}
 
+                  {/* Engineer Specific Form */}
                   {userType.code === "ENGINEER" ? (
                     <>
                       <div className="grid gap-2">
-                        <Label htmlFor="engineerType">Engineer Type</Label>
+                        <Label htmlFor="engineerType">
+                          {t("RegisterType.Engineer_Type_placeholder")}
+                        </Label>
                         <Combobox
                           items={engineerTypes}
                           value={values.engineer.type.id}
@@ -777,7 +1196,7 @@ export default function Company() {
                             setFieldValue("engineer.type.id", value);
                             setFieldValue("engineer.engineerServ", []);
                           }}
-                          placeholder="Select Engineer Type"
+                          placeholder={t("RegisterType.Engineer_Type")}
                           error={errors.engineer?.type?.id as string}
                           touched={touched.engineer?.type?.id}
                         />
@@ -792,7 +1211,7 @@ export default function Company() {
                       {values.engineer.type.id !== 0 && (
                         <div className="grid gap-2">
                           <Label htmlFor="engineerServices">
-                            Engineer Services
+                            {t("RegisterType.Engineer_Services")}
                           </Label>
                           <div className="grid grid-cols-2 gap-2">
                             {engineerServices.map((service) => (
@@ -834,7 +1253,9 @@ export default function Company() {
                           {errors.engineer?.engineerServ &&
                             touched.engineer?.engineerServ && (
                               <p className="text-red-500 text-sm">
-                                At least one engineer service is required
+                                {t(
+                                  "RegisterType.validationSchema.engineer.Engineer_Services"
+                                )}
                               </p>
                             )}
                         </div>
@@ -842,23 +1263,32 @@ export default function Company() {
                     </>
                   ) : (
                     <>
+                      {/* Technical Worker Specific Form */}
                       {userType.code === "TECHNICAL_WORKER" && (
                         <>
                           <div className="grid gap-2">
                             <Label htmlFor="technicalWorkerType">
-                              Technical Worker Type
+                              {t("RegisterType.Technical_Worker_Type")}
                             </Label>
                             <Combobox
                               items={technicalWorkerTypes}
                               value={values.technicalWorker.type.id}
                               onChange={(value) => {
-                                setFieldValue("technicalWorker.type.id", value);
-                                setFieldValue(
-                                  "technicalWorker.workerServs",
-                                  []
-                                );
+                                // Only update if the value is actually changing
+                                if (value !== values.technicalWorker.type.id) {
+                                  setFieldValue(
+                                    "technicalWorker.type.id",
+                                    value
+                                  );
+                                  setFieldValue(
+                                    "technicalWorker.workerServs",
+                                    []
+                                  );
+                                }
                               }}
-                              placeholder="Select Technical Worker Type"
+                              placeholder={t(
+                                "RegisterType.Technical_Worker_Type_placeholder"
+                              )}
                               error={errors.technicalWorker?.type?.id as string}
                               touched={touched.technicalWorker?.type?.id}
                             />
@@ -873,7 +1303,7 @@ export default function Company() {
                           {values.technicalWorker.type.id !== 0 && (
                             <div className="grid gap-2">
                               <Label htmlFor="technicalWorkerServices">
-                                Technical Worker Services
+                                {t("RegisterType.Technical_Worker_Services")}
                               </Label>
                               <div className="grid grid-cols-2 gap-2">
                                 {technicalWorkerServices.map((service) => (
@@ -917,19 +1347,24 @@ export default function Company() {
                               {errors.technicalWorker?.workerServs &&
                                 touched.technicalWorker?.workerServs && (
                                   <p className="text-red-500 text-sm">
-                                    At least one technical worker service is
-                                    required
+                                    {t(
+                                      "RegisterType.validationSchema.technicalWorker.Worker_Services"
+                                    )}
                                   </p>
                                 )}
                             </div>
                           )}
                         </>
                       )}
+
+                      {/* Store or Exhibition Form */}
                       {(userType.code === "STORE" ||
                         userType.code === "EXHIBITION") && (
                         <>
                           <div className="grid gap-2">
-                            <Label htmlFor="tradName">Trade Name</Label>
+                            <Label htmlFor="tradName">
+                              {t("RegisterType.Trade_Name")}
+                            </Label>
                             <Input
                               id="tradName"
                               name={`${formKey}.tradName`}
@@ -949,7 +1384,9 @@ export default function Company() {
                             )}
                           </div>
                           <div className="grid gap-2">
-                            <Label htmlFor="bioAr">Arabic Bio</Label>
+                            <Label htmlFor="bioAr">
+                              {t("RegisterType.Arabic_Bio")}
+                            </Label>
                             <Input
                               id="bioAr"
                               name={`${formKey}.bioAr`}
@@ -969,7 +1406,9 @@ export default function Company() {
                             )}
                           </div>
                           <div className="grid gap-2">
-                            <Label htmlFor="bioEn">English Bio</Label>
+                            <Label htmlFor="bioEn">
+                              {t("RegisterType.English_Bio")}
+                            </Label>
                             <Input
                               id="bioEn"
                               name={`${formKey}.bioEn`}
@@ -990,7 +1429,7 @@ export default function Company() {
                           </div>
                           <div className="grid gap-2">
                             <Label htmlFor="businessTypes">
-                              Business Types
+                              {t("RegisterType.Business_Types")}
                             </Label>
                             <div className="grid grid-cols-2 gap-2">
                               {businessTypes.map((type) => (
@@ -1033,7 +1472,9 @@ export default function Company() {
                             {formErrors?.businessTypes &&
                               formTouched?.businessTypes && (
                                 <p className="text-red-500 text-sm">
-                                  At least one business type is required
+                                  {t(
+                                    "RegisterType.validationSchema.businessEntity.businessTypes"
+                                  )}
                                 </p>
                               )}
                           </div>
@@ -1042,6 +1483,157 @@ export default function Company() {
                     </>
                   )}
 
+                  {/* NEW CODE START - Engineering Office .......................... */}
+                  {userType.code === "ENGINEERING_OFFICE" && (
+                    <>
+                      <div className="grid gap-2">
+                        <Label htmlFor="tradeName">{t("RegisterType.Trade_Name")}</Label>
+                        <Input
+                          id="tradeName"
+                          name="engineeringOffice.tradeName"
+                          value={values.engineeringOffice.tradeName}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={
+                            errors.engineeringOffice?.tradeName &&
+                            touched.engineeringOffice?.tradeName
+                              ? "border-red-500"
+                              : ""
+                          }
+                        />
+                        {errors.engineeringOffice?.tradeName &&
+                          touched.engineeringOffice?.tradeName && (
+                            <p className="text-red-500 text-sm">
+                              {errors.engineeringOffice.tradeName}
+                            </p>
+                          )}
+                      </div>
+                      <div className="grid gap-2">
+                        <Label htmlFor="description">{t("RegisterType.Description")}</Label>
+                        <Input
+                          id="description"
+                          name="engineeringOffice.description"
+                          value={values.engineeringOffice.description}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={
+                            errors.engineeringOffice?.description &&
+                            touched.engineeringOffice?.description
+                              ? "border-red-500"
+                              : ""
+                          }
+                        />
+                        {errors.engineeringOffice?.description &&
+                          touched.engineeringOffice?.description && (
+                            <p className="text-red-500 text-sm">
+                              {errors.engineeringOffice.description}
+                            </p>
+                          )}
+                      </div>
+                      <div className="grid gap-2">
+                        <Label htmlFor="engineeringOfficeField">
+                        {t("RegisterType.Engineering-Office-Field")}
+                        </Label>
+                        <Combobox
+                          items={engineeringOfficeFields}
+                          value={
+                            values.engineeringOffice.engineeringOfficeField.id
+                          }
+                          onChange={(value) => {
+                            setFieldValue(
+                              "engineeringOffice.engineeringOfficeField.id",
+                              value
+                            );
+                            setFieldValue(
+                              "engineeringOffice.engineeringOfficeDepartments",
+                              []
+                            );
+                          }}
+                          placeholder={t("RegisterType.Engineer_Office_placeholder")}
+                          error={
+                            errors.engineeringOffice?.engineeringOfficeField
+                              ?.id as string
+                          }
+                          touched={
+                            touched.engineeringOffice?.engineeringOfficeField
+                              ?.id
+                          }
+                        />
+                        {errors.engineeringOffice?.engineeringOfficeField?.id &&
+                          touched.engineeringOffice?.engineeringOfficeField
+                            ?.id && (
+                            <p className="text-red-500 text-sm">
+                              {
+                                errors.engineeringOffice.engineeringOfficeField
+                                  .id
+                              }
+                            </p>
+                          )}
+                      </div>
+
+                      {/* Fix the checkbox implementation in the JSX */}
+                      {values.engineeringOffice.engineeringOfficeField.id !==
+                        0 && (
+                        <div className="grid gap-2">
+                          <Label htmlFor="engineeringOfficeDepartments">
+                          {t("RegisterType.Engineering-Office-Departments")}
+                          </Label>
+                          <div className="grid grid-cols-2 gap-2">
+                            {engineeringOfficeDepartments.map((department) => (
+                              <Card
+                                key={department.id}
+                                className="p-2 flex justify-between items-center"
+                              >
+                                <label
+                                  htmlFor={`department-${department.id}`}
+                                  className="flex items-center"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id={`department-${department.id}`}
+                                    checked={values.engineeringOffice.engineeringOfficeDepartments.some(
+                                      (d) => d.id === department.id
+                                    )}
+                                    onChange={(e) => {
+                                      const updatedDepartments = e.target
+                                        .checked
+                                        ? [
+                                            ...values.engineeringOffice
+                                              .engineeringOfficeDepartments,
+                                            { id: department.id },
+                                          ]
+                                        : values.engineeringOffice.engineeringOfficeDepartments.filter(
+                                            (d) => d.id !== department.id
+                                          );
+                                      setFieldValue(
+                                        "engineeringOffice.engineeringOfficeDepartments",
+                                        updatedDepartments
+                                      );
+                                    }}
+                                    className="mr-2"
+                                  />
+                                  {department.name}
+                                </label>
+                              </Card>
+                            ))}
+                          </div>
+                          {errors.engineeringOffice
+                            ?.engineeringOfficeDepartments &&
+                            touched.engineeringOffice
+                              ?.engineeringOfficeDepartments && (
+                              <p className="text-red-500 text-sm">
+                                {t(
+                                    "RegisterType.validationSchema.engineeringOffice.engineeringOfficeDepartments"
+                                  )}
+                              </p>
+                            )}
+                        </div>
+                      )}
+                    </>
+                  )}
+                  {/* NEW CODE End - Engineering Office .......................... */}
+
+                  {/* Form Buttons */}
                   <div className="flex flex-col gap-4">
                     <Button
                       type="button"
@@ -1055,24 +1647,20 @@ export default function Company() {
                       }}
                       className="w-full btn secondary-grad"
                     >
-                      Back
+                      {t("RegisterType.Back_btn")}
                     </Button>
                     <Button
-                      type="button"
+                      type="submit"
                       disabled={isLoading}
                       className="w-full relative btn primary-grad"
-                      onClick={() => {
-                        handleSubmit();
-                        handleSignUp(values as FormValues);
-                      }}
                     >
                       {isLoading ? (
                         <div className="flex items-center justify-center">
                           <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                          <span>Signing Up...</span>
+                          <span> {t("RegisterForm.Signing")}</span>
                         </div>
                       ) : (
-                        "Sign Up"
+                        t("RegisterForm.SignUp")
                       )}
                     </Button>
                   </div>

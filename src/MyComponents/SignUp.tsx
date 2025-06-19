@@ -9,8 +9,10 @@ import axios from "axios"
 import { Button } from "@/components/ui/button"
 import google from '/Google.png?url'
 import facebook from '/Facebook.png?url'
+import { useTranslation } from 'react-i18next';
 
 export default function SignUp() {
+  const { t ,i18n} = useTranslation();
 
   const userContext = useContext(UserContext);
   if (!userContext) {
@@ -34,7 +36,7 @@ export default function SignUp() {
       dataToSend,
       {
         headers: {
-          "Accept-Language": "en",
+          "Accept-Language":i18n.language ,
         },
       }
     )
@@ -46,15 +48,16 @@ export default function SignUp() {
   return (
     <div className="flex-1 flex items-center justify-center bg-background">
       <Card className="w-full max-w-md p-6">
-        <RegisterForm onSubmit={handleSignup} userType={{ id: 7, code: "GENERAL_USER" }} btnText={'Sign Up'}      initialValues={{}}
+        <RegisterForm onSubmit={handleSignup} userType={{ id: 7, code: "GENERAL_USER" }} btnText={'Sign Up'} initialValues={{}}
         onChange={() => {}} >
+
           <>
           <div className="relative my-4">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+          <span className="bg-background px-2 text-muted-foreground">{t('login.or_continue_with')}</span>
         </div>
       </div>
 
@@ -65,7 +68,7 @@ export default function SignUp() {
             alt="Google"
             className="mr-2 w-6 h-6"
           />
-          Continue with Google
+          {t('login.continue_with_google')}
         </Button>
         <Button variant="outline" className="w-full btn font-medium">
           <img
@@ -73,7 +76,8 @@ export default function SignUp() {
             alt="Facebook"
             className="mr-2 w-6 h-6"
           />
-          Continue with Facebook
+          {t('login.continue_with_facebook')}
+          
         </Button>
       </div>
           </>

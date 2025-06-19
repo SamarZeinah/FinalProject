@@ -30,6 +30,7 @@ import MultiSelectOption from "../MyComponents/MultiChoice";
 import { UserContext } from "@/Contexts/UserContext";
 import { ImageUpload } from "@/MyComponents/image-upload";
 import { IUser } from "@/interfaces";
+import { useTranslation } from "react-i18next";
 
 const defaultObj: IUser = {
   id: null,
@@ -84,6 +85,7 @@ interface IUserType {
 }
 
 const ProfileEditor = () => {
+  const{t,i18n}=useTranslation();
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
   if (!userContext) {
@@ -149,8 +151,11 @@ const ProfileEditor = () => {
   console.log("DAta From API", tempDta);
 
   let user_type = localStorage.getItem("user-type");
+  console.log("user_type-before",user_type)
   // Ensure user_type is a valid string before replacing spaces
   user_type = user_type ? user_type.replace(/\s+/g, "-") : null;
+  console.log("user_type-after",user_type)
+
 
 
   const basicRef = useRef<HTMLDivElement>(null);
@@ -192,9 +197,9 @@ const ProfileEditor = () => {
 
   const SidebarContent = () => (
     <nav className="space-y-1 p-2">
-      <NavButton id="basic" label="Basic Information" icon={User} />
-      <NavButton id="bio" label="Bio" icon={Briefcase} />
-      <NavButton id="links" label="Links" icon={Link2} />
+      <NavButton id="basic" label={t('ProfileEditor.Basic_Information')} icon={User} />
+      <NavButton id="bio" label={t('ProfileEditor.Bio')} icon={Briefcase} />
+      <NavButton id="links" label={t('ProfileEditor.Links')} icon={Link2} />
     </nav>
   );
 
@@ -218,69 +223,69 @@ const ProfileEditor = () => {
     const newErrors = { ...errors };
 
     if (!firstName.trim()) {
-      newErrors.firstName = "First name is required";
+      newErrors.firstName = t('ProfileEditor.validateForm.firstName.required');
       isValid = false;
     } else {
       newErrors.firstName = "";
     }
 
     if (!lastName.trim()) {
-      newErrors.lastName = "Last name is required";
+      newErrors.lastName = t('ProfileEditor.validateForm.lastName.required');
       isValid = false;
     } else {
       newErrors.lastName = "";
     }
 
     if (!email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = t('ProfileEditor.validateForm.email.required');
       isValid = false;
     } else if (!validateEmail(email)) {
-      newErrors.email = "Invalid email format";
+      newErrors.email =  t('ProfileEditor.validateForm.email.invalid');
       isValid = false;
     } else {
       newErrors.email = "";
     }
 
     if (phone && !validatePhone(phone)) {
-      newErrors.phone = "Invalid phone number format";
+      newErrors.phone = t('ProfileEditor.validateForm.phone.invalid');
       isValid = false;
     } else {
       newErrors.phone = "";
     }
 
     if (!yearsOfExperience) {
-      newErrors.yearsOfExperience = "Years of experience is required";
+      newErrors.yearsOfExperience =t('ProfileEditor.validateForm.yearsOfExperience.required');
       isValid = false;
     } else if (yearsOfExperience < 0) {
-      newErrors.yearsOfExperience = "Years of experience cannot be negative";
+      newErrors.yearsOfExperience =t('ProfileEditor.validateForm.yearsOfExperience.negative');
       isValid = false;
     } else {
       newErrors.yearsOfExperience = "";
     }
 
     if (selectedGovernorate?.id && !selectedCity?.id) {
-      newErrors.city = "City is required when governorate is selected";
+      newErrors.city = t('ProfileEditor.validateForm.city.required');
       isValid = false;
     } else {
       newErrors.city = "";
     }
 
     if (selectedUserServices.length === 0) {
-      newErrors.userServices = "At least one service is required";
+      newErrors.userServices =t('ProfileEditor.validateForm.Services.required');
       isValid = false;
     } else {
       newErrors.userServices = "";
     }
 
     if (linkedin && !validateUrl(linkedin)) {
-      newErrors.linkedin = "Invalid LinkedIn URL";
+      newErrors.linkedin = t('ProfileEditor.validateForm.linkedin.invalid');
       isValid = false;
     } else {
       newErrors.linkedin = "";
     }
 
     if (behance && !validateUrl(behance)) {
-      newErrors.behance = "Invalid Behance URL";
+      newErrors.behance = t('ProfileEditor.validateForm.Behance.invalid');
       isValid = false;
     } else {
       newErrors.behance = "";
@@ -356,7 +361,7 @@ const ProfileEditor = () => {
 
       const response = await axios.put(`${apiUrl}`, cleanDataToSend, {
         headers: {
-          "Accept-Language": "en",
+          "Accept-Language": i18n.language,
           Authorization: `Bearer ${userToken}`,
           "Content-Type": "application/json",
         },
@@ -373,7 +378,7 @@ const ProfileEditor = () => {
             formData,
             {
               headers: {
-                "Accept-Language": "en",
+                "Accept-Language": i18n.language,
                 Authorization: `Bearer ${userToken}`,
                 "Content-Type": "multipart/form-data",
               },
@@ -381,7 +386,7 @@ const ProfileEditor = () => {
           );
 
           if (photoUploadResponse.data.success) {
-            toast.success("Profile updated successfully!", {
+            toast.success(t('ProfileEditor.Profile_updated'), {
               duration: 2000,
               position: "top-center",
             });
@@ -391,10 +396,10 @@ const ProfileEditor = () => {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }, 2000);
           } else {
-            toast.error("Failed to upload personal photo. Please try again.");
+            toast.error(t('ProfileEditor.Failed_personal_photo'));
           }
         } else {
-          toast.success("Profile updated successfully!", {
+          toast.success(t('ProfileEditor.Profile_updated'), {
             duration: 2000,
             position: "top-center",
           });
@@ -406,16 +411,16 @@ const ProfileEditor = () => {
         }
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error(t('ProfileEditor.Error_updating_profile'), error);
       if (axios.isAxiosError(error) && error.response) {
-        console.error("API Error Response:", error.response.data);
+        console.error(t('ProfileEditor.API_Error_Response'), error.response.data);
         toast.error(
           `Failed to update profile: ${
             error.response.data.message || "Please try again."
           }`
         );
       } else {
-        toast.error("Failed to update profile. Please try again.");
+        toast.error(t('ProfileEditor.Failed_update_profile_try_again'));
       }
     }
   };
@@ -423,16 +428,25 @@ const ProfileEditor = () => {
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-
+    let apiUrl;    
+    if (user_type === "عامل-فني" || user_type === "technical-worker") {
+      apiUrl= `${pathUrl}/api/v1/technical-workers/user?userId=${
+        userId || localStorage.getItem("user-id")
+      }`
+    } else {
+      apiUrl= `${pathUrl}/api/v1/engineers/user?userId=${
+        userId || localStorage.getItem("user-id")
+      }`
+    }
     async function getUserData() {
       try {
-        const { data } = await axios.get(
-          `${pathUrl}/api/v1/${user_type}s/user?userId=${
-            userId || localStorage.getItem("user-id")
-          }`,
+        const { data } = await axios.get( apiUrl,
+          // `${pathUrl}/api/v1/${user_type}s/user?userId=${
+          //   userId || localStorage.getItem("user-id")
+          // }`,
           {
             headers: {
-              "Accept-Language": "en",
+              "Accept-Language": i18n.language,
               Authorization: `Bearer ${userToken}`,
             },
             signal,
@@ -496,7 +510,7 @@ const ProfileEditor = () => {
 
     getUserData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, userToken, user_type, pathUrl]); // Added tempDta.user.city to dependencies
+  }, [userId, userToken, user_type, pathUrl, i18n.language]); // Added tempDta.user.city to dependencies
 
   useEffect(() => {
     if (tempDta?.user.governorate) {
@@ -520,7 +534,7 @@ const ProfileEditor = () => {
       try {
         const { data } = await axios.get(`${pathUrl}/api/v1/governorates`, {
           headers: {
-            "Accept-Language": "en",
+            "Accept-Language": i18n.language,
           },
           signal,
         });
@@ -535,7 +549,7 @@ const ProfileEditor = () => {
     return () => {
       controller.abort();
     };
-  }, [pathUrl, tempDta?.user.governorate]);
+  }, [pathUrl, tempDta?.user.governorate,i18n.language]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -563,7 +577,7 @@ const ProfileEditor = () => {
           `${pathUrl}/api/v1/cities/governorate/${selectedGovernorate?.id}`,
           {
             headers: {
-              "Accept-Language": "en",
+              "Accept-Language": i18n.language,
             },
             signal,
           }
@@ -586,19 +600,26 @@ const ProfileEditor = () => {
     selectedGovernorate?.id,
     tempDta.user.city,
     tempDta.user.governorate?.id,
+    i18n.language
   ]); // Added tempDta.user.city to dependencies
 
+
+                            // ############
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
 
     const type =
       tempDta?.user.userType.code.toLowerCase().replace(/_/g, "-") + "-types";
+      console.log("typetype",type)
     async function getUserType() {
       try {
-        const { data } = await axios.get(`${pathUrl}/api/v1/${type}`, {
+        const { data } = await axios.get(`${pathUrl}/api/v1/${type}`, 
+          // pi/v1/engineers
+          {
           headers: {
-            "Accept-Language": "en",
+          "Accept-Language": i18n.language,
+            // "Accept-Language": "en", 
           },
           signal,
         });
@@ -613,7 +634,7 @@ const ProfileEditor = () => {
     return () => {
       controller.abort();
     };
-  }, [pathUrl, tempDta?.user.userType.code]);
+  }, [pathUrl, tempDta?.user.userType.code,i18n.language]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -628,14 +649,15 @@ const ProfileEditor = () => {
       );
     }
     const type = tempDta?.user.userType.code.toLowerCase().replace(/_/g, "-");
+    console.log("type33",type);
     async function getUserServices() {
       try {
         const { data } = await axios.get(
           `${pathUrl}/api/v1/${type}-services/service/${selectedUserType?.id}`,
           {
             headers: {
-              "Accept-Language": "en",
               Authorization: `Bearer ${userToken}`,
+              "Accept-Language": i18n.language,
             },
             signal,
           }
@@ -653,7 +675,11 @@ const ProfileEditor = () => {
     return () => {
       controller.abort();
     };
-  }, [pathUrl, selectedUserType?.id, tempDta, userToken]); // Added tempDta to dependencies
+  }, [pathUrl, selectedUserType?.id, tempDta, userToken,i18n.language]); // Added tempDta to dependencies
+
+  
+                            // ############
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4 md:p-8 pt-20">
@@ -666,7 +692,7 @@ const ProfileEditor = () => {
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
               <ChevronLeft className="w-4 h-4 mr-2" />
-              Back to profile
+              {t('ProfileEditor.Back_to_profile')}
             </Button>
           </Link>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -695,7 +721,7 @@ const ProfileEditor = () => {
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               >
                 <ChevronLeft className="w-4 h-4 mr-4" />
-                Back to profile
+                {t('ProfileEditor.Back_to_profile')}
               </Button>
             </Link>
             <SidebarContent />
@@ -731,7 +757,7 @@ const ProfileEditor = () => {
                           className="w-32 h-32 md:w-40 md:h-40"
                         />
                         <span className="text-sm text-muted-foreground">
-                          Click to change profile picture
+                          {t('ProfileEditor.Personal_Photo')}
                         </span>
                       </div>
                       {errors.personalPhoto && (
@@ -744,10 +770,10 @@ const ProfileEditor = () => {
                     <div className="space-y-6">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label htmlFor="firstName">First Name</Label>
+                          <Label htmlFor="firstName">{t('ProfileEditor.first_name')}</Label>
                           <Input
                             id="firstName"
-                            placeholder="Enter first name"
+                            placeholder={t('ProfileEditor.first_name_placeholder')}
                             className={`mt-1 ${
                               errors.firstName ? "border-red-500" : ""
                             }`}
@@ -765,10 +791,10 @@ const ProfileEditor = () => {
                         </div>
 
                         <div>
-                          <Label htmlFor="lastName">Last Name</Label>
+                          <Label htmlFor="lastName">{t('ProfileEditor.last_name')}</Label>
                           <Input
                             id="lastName"
-                            placeholder="Enter last name"
+                            placeholder={t('ProfileEditor.last_name_placeholder')}
                             className={`mt-1 ${
                               errors.lastName ? "border-red-500" : ""
                             }`}
@@ -787,13 +813,13 @@ const ProfileEditor = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="email">Email address</Label>
+                        <Label htmlFor="email">{t('ProfileEditor.email')}</Label>
                         <div className="relative">
                           <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                           <Input
                             id="email"
                             type="email"
-                            placeholder="Enter your email"
+                            placeholder={t('ProfileEditor.email_placeholder')}
                             className={`pl-10 mt-1 ${
                               errors.email ? "border-red-500" : ""
                             }`}
@@ -812,13 +838,13 @@ const ProfileEditor = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="phone">Phone</Label>
+                        <Label htmlFor="phone">{t('ProfileEditor.phone_number')}</Label>
                         <div className="relative">
                           <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                           <Input
                             id="phone"
                             type="tel"
-                            placeholder="Enter phone number"
+                            placeholder={t('ProfileEditor.phone_number_placeholder')}
                             className={`pl-10 mt-1 ${
                               errors.phone ? "border-red-500" : ""
                             }`}
@@ -837,7 +863,7 @@ const ProfileEditor = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="governate">Governate</Label>
+                        <Label htmlFor="governate">{t('ProfileEditor.Governorate')}</Label>
                         <Select
                           value={selectedGovernorate?.id?.toString() ?? ""}
                           onValueChange={(id) => {
@@ -863,7 +889,7 @@ const ProfileEditor = () => {
                           }}
                         >
                           <SelectTrigger className="mt-1">
-                            <SelectValue placeholder="Select governorate" />
+                            <SelectValue placeholder={t('ProfileEditor.Governorate_placeholder')}/>
                           </SelectTrigger>
                           <SelectContent>
                             {governates.map((gover) => (
@@ -879,7 +905,7 @@ const ProfileEditor = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="city">City</Label>
+                        <Label htmlFor="city">{t('ProfileEditor.City')}</Label>
                         <Select
                           value={
                             selectedCity?.id?.toString() ||
@@ -898,7 +924,7 @@ const ProfileEditor = () => {
                           }}
                         >
                           <SelectTrigger className="mt-1">
-                            <SelectValue placeholder="Select city" />
+                            <SelectValue placeholder="{t('ProfileEditor.City_placeholder')}" />
                           </SelectTrigger>
                           <SelectContent>
                             {cities.map((city) => (
@@ -919,11 +945,11 @@ const ProfileEditor = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="experience">Years of Experience</Label>
+                        <Label htmlFor="experience">{t('ProfileEditor.Years_of_Experience')}</Label>
                         <Input
                           id="experience"
                           type="text"
-                          placeholder="Enter years of experience"
+                          placeholder={t('ProfileEditor.Years_of_Experience_placeholder')}
                           className={`mt-1 ${
                             errors.yearsOfExperience ? "border-red-500" : ""
                           }`}
@@ -948,7 +974,8 @@ const ProfileEditor = () => {
 
                       <div>
                         <Label htmlFor="type">
-                          {tempDta?.user.userType.code.toLowerCase() + " type"}
+                          {tempDta?.user.userType.code.toLowerCase() + t('ProfileEditor.type')}
+                          {/* {(tempDta?.user?.userType?.name?.toLowerCase() ?? '') + t('ProfileEditor.type')} */}
                         </Label>
                         <Select
                           value={
@@ -973,7 +1000,7 @@ const ProfileEditor = () => {
                           }}
                         >
                           <SelectTrigger className="mt-1">
-                            <SelectValue placeholder="Select Engineer Type" />
+                            <SelectValue placeholder={t('ProfileEditor.Select_Type_placeholder')} />
                           </SelectTrigger>
                           <SelectContent>
                             {userTypes.map((userType) => (
@@ -981,7 +1008,7 @@ const ProfileEditor = () => {
                                 key={userType.id}
                                 value={userType.id.toString()}
                               >
-                                {userType.nameEn}
+                                {userType.name}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -1017,11 +1044,11 @@ const ProfileEditor = () => {
                 className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 border-0 shadow-lg pt-20"
               >
                 <CardHeader>
-                  <h2 className="text-xl font-semibold">Bio</h2>
+                  <h2 className="text-xl font-semibold">{t('ProfileEditor.BIO')}</h2>
                 </CardHeader>
                 <CardContent>
                   <Textarea
-                    placeholder="Tell us about yourself..."
+                    placeholder={t('ProfileEditor.Bio_placeholder')}
                     className="min-h-[150px]"
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
@@ -1035,12 +1062,12 @@ const ProfileEditor = () => {
                 className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 border-0 shadow-lg pt-20"
               >
                 <CardHeader>
-                  <h2 className="text-xl font-semibold">Links</h2>
+                  <h2 className="text-xl font-semibold">{t('ProfileEditor.Links')}</h2>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="linkedin">LinkedIn Profile</Label>
+                      <Label htmlFor="linkedin">{t('ProfileEditor.LinkedIn_Profile')} </Label>
                       <Input
                         id="linkedin"
                         type="url"
@@ -1061,7 +1088,7 @@ const ProfileEditor = () => {
                       )}
                     </div>
                     <div>
-                      <Label htmlFor="behance">Behance Profile</Label>
+                      <Label htmlFor="behance">{t('ProfileEditor.Behance_Profile')}</Label>
                       <Input
                         id="behance"
                         type="url"
@@ -1096,11 +1123,11 @@ const ProfileEditor = () => {
                 >
                   {isSubmitting ? (
                     <>
-                      <span className="mr-2">Confirm...</span>
+                      <span className="mr-2">{t('ProfileEditor.Confirming_btn')}</span>
                       <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
                     </>
                   ) : (
-                    "Confirm Edit"
+                    t('ProfileEditor.Confirm_btn')
                   )}
                 </Button>
               </div>

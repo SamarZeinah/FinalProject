@@ -1,0 +1,595 @@
+{
+  "Navbar":{
+    "Login_btn":"Login",
+    "JoinUs_btn":"Join Us",
+    "Profile":"Profile",
+    "Logout":"Logout"
+  },
+"Profile_Navbar":{
+  "Home":"Home",
+  "Products":"Products",
+  "Categories":"Categories",
+  "Brands":"Brands",
+  "Upgrade_to_pro":"Upgrade to pro",
+  "Add_Project":"Add Project"
+},
+"login": {
+  "email_or_phone": "Email or Phone",
+  "email_or_phone_placeholder": "Enter your Email or Phone",
+  "password": "Password",
+  "password_placeholder": "Password",
+  "forgot_password": "Forgot password?",
+  "logging_in": "Logging in...",
+  "log_in": "Log in",
+  "or_continue_with": "Or continue with",
+  "continue_with_google": "Continue with Google",
+  "continue_with_facebook": "Continue with Facebook",
+
+  "validationSchema": {
+    "email": {
+      "type": "string",
+      "email": "Invalid email address",
+      "required": "Email or Phone is required",
+      "invalid": "Must be a valid email or phone number"
+    },
+    "password": {
+      "type": "string",
+      "matches": {
+        "pattern": "^.{8,}$",
+        "message": "Password must be at least 8 characters long"
+      },
+      "required": "Password is required",
+      "invalid": "Invalid password"
+    }
+  }
+},
+
+  "forgot_password": {
+    "title": "Forgot Password",
+    "enter_email": "Enter your email to receive a verification code",
+    "email_placeholder": "Enter your email",
+    "load_Verification_btn":"Sending...",
+    "Verification_btn":"Send Verification Code",
+    "no_account_text": "Don't have an account? ",
+    "create_account_link": "Create a new account",
+    "verification_title":"Verification Code",
+    "verification_subtitle":" Enter the verification code we sent to your email",
+    "verification_buttonText":"Verify Code",
+    "load_verification_buttonText":"Verifying...",
+    "New_Password_Title":"New Password",
+    "New_Password_Dec":"Enter your new password",
+    "New_Password_Placeholder":"New password",
+    "Confirm_Password_Placeholder":"Confirm password",
+    "Email_Step":"Email",
+    "Verify_Step":"Verify",
+    "Reset_btn":"Reset Password",
+    "Resetting_btn":"Resetting Password...",
+    "Password_Step":"Password",
+    "code_sent":"Verification code sent successfully",
+    "code_failed":"Failed to send verification code",
+    "Verification_successful":"Verification successful",
+    "Failed_verify_code":"Failed to verify code",
+    "Password_reset_successful":"Password reset successful",
+    "Failed_reset_password":"Failed to reset password",
+
+      "validationSchema": {
+      "email": {
+                "type": "string",
+                "email": "Invalid email format",
+                "required": "Email is required"
+              },
+       "newPassword": {
+      "matches": {
+        "pattern": "^.{8,}$",
+        "message": "Password must be at least 8 characters"
+      },
+      "required": "Password is required"
+    },
+    "ConfirmPassword": {
+        "message": "Passwords must match",
+      "required": "Please confirm your password",
+      "invalid": "Invalid password"
+    }
+  }
+},
+
+  "RegisterForm": {
+    "title": "Create a New Account",
+    "first_name": "First Name",
+    "first_name_placeholder": "Enter your first name",
+    "last_name": "Last Name",
+    "last_name_placeholder": "Enter your last name",
+    "email": "Email address",
+    "email_placeholder": "Enter your email",
+    "phone_number": "Phone Number",
+    "phone_number_placeholder": "Enter your phone number",
+    "password": "Password",
+    "password_placeholder": "Enter your password",
+    "confirm_password": "Confirm Password",
+    "confirm_password_placeholder": "Re-enter your password",
+    "Governorate": "Governorate (Optional)",
+    "Governorate_placeholder": "Select governorate...",
+    "City_Required": "City (Required)",
+    "City": "City",
+    "City_placeholder":"Select city...",
+    "SignUp": "Sign Up",
+    "Signing": "Signing Up...",
+
+      "validationSchema": {
+        "firstName": {
+          "type": "string",
+          "required": "First name is required",
+          "invalid": "Invalid first name"
+        },
+        "lastName": {
+          "type": "string",
+          "required": "Last name is required",
+          "invalid": "Invalid last name"
+        },
+        "email": {
+          "type": "string",
+          "email": "Invalid email address",
+          "required": "Email is required",
+          "invalid": "Invalid email address"
+        },
+        "password": {
+          "type": "string",
+          "matches": {
+            "pattern": "^.{8,}$",
+            "message": "Password must be at least 8 characters long"
+          },
+          "required": "Password is required",
+          "invalid": "Invalid password"
+        },
+        "phone": {
+          "type": "string",
+          "matches": {
+            "pattern": "^01[0125][0-9]{8}$",
+            "message": "Invalid phone number"
+          },
+          "optional": true,
+          "invalid": "Invalid phone number"
+        },
+        "rePassword": {
+          "type": "string",
+            "message": "Passwords must match",
+          "required": "Please confirm your password",
+          "invalid": "Invalid password"
+        },
+        "governorate": {
+          "type": "object",
+          "shape": {
+            "id": {
+              "type": "number",
+              "invalid": "Invalid governorate ID"
+            }
+          },
+          "nullable": true
+        },
+        "city": {
+          "type": "number",
+          "invalid": "Invalid city ID",
+          "required": "City is required",
+          "nullable": true
+        }
+      }
+  },
+
+  "RegisterType":{
+    "Years_of_Experience":"Years of Experience",
+    "Engineer_Type":" Engineer Type",
+    "Engineer_Type_placeholder":" Select Engineer Type",
+    "Engineer_Services":" Engineer Services",
+    "Technical_Worker_Type":" Technical Worker Type",
+    "Technical_Worker_Type_placeholder":" Select Technical Worker Type",
+    "Technical_Worker_Services":" Technical Worker Services",
+    "Arabic_Bio":"Arabic Bio",
+    "Trade_Name":"Trade Name",
+    "English_Bio":"English Bio",
+    "Business_Types":"Business Types",
+    "Back_btn":"Back",
+    "Description":"Description",
+    "Engineering-Office-Field":"Engineering Office Field",
+    "Engineering-Office-Departments":" Engineering Office Departments",
+    "Engineer_Office_placeholder":"Select Engineering Office Field",
+
+    "validationSchema":{
+    "engineer": {
+      "type": "Engineer type is required",
+      "yearsOfExperience": "Years of experience is required",
+      "yearsOfExperience_invalid": "Years of experience must be a valid number",
+      "Engineer_Services": "At least one engineer service must be selected"
+    },
+    "technicalWorker": {
+            "type": "Worker type is required",
+            "yearsOfExperience": "Years of Experience is required",
+            "yearsOfExperience_invalid": "Please enter a valid number",
+            "Worker_Services": "At least one service is required"
+          },
+      "businessEntity": {
+        "tradName": "Trade name is required",
+        "bioAr": "Arabic bio is required",
+        "bioEn": "English bio is required",
+        "businessTypes": "At least one business type is required"
+      },
+      "engineeringOffice":{
+        "tradeName":"Trade name is required",
+        "description":"Description is required",
+        "engineeringOfficeField":"Engineering office field is required",
+        "engineeringOfficeDepartments":"At least one department is required"
+      }
+    },
+    "FetchError":{
+      "user_types" :"Failed to fetch user types. Please try again.",
+      "engineer_types" :"Error fetching engineer types:",
+      "engineer_services" :"Failed to fetch engineer services. Please try again.",
+      "worker_types" :"Failed to fetch technical worker types. Please try again.",
+      "worker_services" :"Failed to fetch technical worker services. Please try again.",
+      "business_types" :"Failed to fetch business types. Please try again.",
+      "governorates" :"Failed to fetch governorates. Please try again.",
+      "cities" :"Failed to fetch cities. Please try again.",
+      "engineeringOffice":"Failed to fetch engineering office fields. Please try again.",
+      "engineeringOfficeDepartments":"Failed to fetch engineering office departments. Please try again."
+    }
+
+
+  },
+  "Client":{
+    "photo_head":"Welcome to ArciSpace",
+    "photo_Dec":" Your smart home ecosystem for household appliances and tools",
+    "Login_Tap":"Log in",
+    "Sign_Tap":" Sign up"
+
+  },
+  "Company":{
+    "photo_head":"Welcome to ArciSpace",
+    "photo_Dec":" Register your company and start growing your business today"
+  },
+  "ProfileEditor":{
+    "Basic_Information":"Basic Information",
+    "Bio":"Bio",
+    "Links":"Links",
+    "Back_to_profile":"Back to profile",
+    "Personal_Photo":"Click to change profile picture",
+    "first_name": "First Name",
+    "first_name_placeholder": "Enter your first name",
+    "last_name": "Last Name",
+    "last_name_placeholder": "Enter your last name",
+    "email": "Email",
+    "email_placeholder": "Enter your email",
+    "phone_number": "Phone Number",
+    "phone_number_placeholder": "Enter your phone number",
+    "Governorate": "Governorate",
+    "Governorate_placeholder": "Select governorate...",
+    "City": "City",
+    "City_placeholder":"Select city...",
+    "Years_of_Experience": "Years of Experience",
+    "Years_of_Experience_placeholder": "Enter Years of Experience",
+    "type":"type",    
+    "Select_Type_placeholder": "Select Type",
+    "Services": "Services",
+    "Services_placeholder": "Select Services",
+    "BIO":"Bio",
+    "Bio_placeholder":"Tell us about yourself...",
+    "LinkedIn_Profile":"LinkedIn Profile",
+    "Behance_Profile":"Behance Profile",
+    "Confirm_btn":"Confirm Edit",
+    "Confirming_btn":"Confirm...",
+    "Profile_updated":"Profile updated successfully!",
+    "Failed_personal_photo":"Failed to upload personal photo. Please try again.",
+    "Error_updating_profile":"Error updating profile:",
+    "API_Error_Response":"API Error Response:",
+    "Failed_update_profile_try_again":"Failed to update profile. Please try again.",
+
+
+    "validateForm":{
+      "firstName": {
+          "required": "First name is required"
+        },
+        "lastName": {
+          "required": "Last name is required"
+        },
+        "email": {
+          "required": "Email is required",
+          "invalid": "Invalid email format"
+        },
+        "phone": {
+          "invalid": "Invalid phone number format"
+        },
+        "yearsOfExperience": {
+          "required": "Years of experience is required",
+          "negative": "Years of experience cannot be negative"
+        },
+        "city": {
+          "required": "City is required when governorate is selected"  
+          },
+        "Services": {
+          "required": "At least one service is required"  
+          },
+        "linkedin": {
+          "invalid": "Invalid LinkedIn URL"  
+          },
+        "Behance": {
+          "invalid": "Invalid Behance URL"  
+          }
+    }
+
+
+  },
+
+  "addProject":{
+    "title":"Add New Project",
+    "Project_Name":"Project Name",
+    "Description":"Description",
+    "Start_Date":"Start Date",
+    "Start_Date_Placeholder":"Pick a date",
+    "End_Date":"End Date",
+    "End_Date_Placeholder":"Pick a date",
+    "Tools_Used":"Tools Used",
+    "Cover_Image":"Cover Image",
+    "Project_Images":"Project Images",
+    "Existing_Images":"Existing Images",
+    "New_Images":"New Images",
+    "Edit_btn":"Edit Project",
+    "Updating_btn":"Updating Project...",
+    "Create":"Create Project",
+    "Creating_btn":"Creating Project...",
+    "Project_created_successfully!":"🎉Project created successfully!",
+    "Failed_create_project":"❌Failed to create project",
+    "Error_creating_project":"Error creating project",
+    "ConfirmDialog_title":"are you sure you want to create this Project?",
+    "ConfirmDialog_desc":"Please review your project details before confirming. This action will create a new project with the provided information.",
+    "ConfirmDialog_confirmText":"Yes, create project",
+    "sending": "Sending",
+    "ConfirmDialog_cancelText":"Cancel",
+    "Project_updated_successfully":"🎉 Project updated successfully!",
+    "Error_updating_project":"Error updating project:",
+    "Failed_update_project":"❌Failed to update project",
+    "Project_deleted_successfully":"🗑️ Project deleted successfully!",
+    "Error_deleting_project":"Error deleting project",
+    "Failed_delete_project":"⚠️Failed to delete project",
+
+
+    "formSchema":{
+      "name":"Project name is required",
+      "description":"Description is required",
+      "startDate":"Start date is required",
+      "endDate":"End date is required",
+      "tools":"Tools are required",
+      "images":"At least one image is required"
+    }
+  },
+  "ProjectCard":{
+    "Timeline":"Timeline",
+    "ToolsUsed":" Tools Used",
+    "EditProject":"Edit Project",
+    "DeleteProject":"Delete Project"
+  },
+
+  "Sidebar":{
+   "Edit_Profile":"Edit Profile",
+   "Links":"Links",
+   "Bio":"Bio",
+   "Services":"Services",
+   "Add_Services":"Add Services",
+   "Certifications":"Certifications",
+   "Add_Certifications":"Add Certifications",
+   "Edit_Certifications":"Edit",
+   "Loading":"Loading...",
+   
+    "Cert_Dele_DialogContent":{
+      "header":"Delete Certification",
+      "Description":"Are you sure you want to delete this certification?",
+      "Delete":"Delete",
+      "Cancel":"Cancel"
+    },
+    "Services_Dele_DialogContent":{
+      "header":"Delete Services",
+      "Description":"Are you sure you want to delete this service?",
+      "Delete":"Delete",
+      "Cancel":"Cancel"
+    },
+    "Services_Add_DialogContent":{
+     "Services_Exists":"Service already exists in the list",
+     "Services_added":"Service added successfully!",
+     "error_adding":"Error adding service",
+     "Add_Service_btn":"Add Service",
+     "Select_service":"Select a service",
+     "Cancel":"Cancel"
+    },
+    "Cert_Add_Dialog":{
+      "header":"Certifications",
+      "Certificate_Name":"Certificate Name",
+      "Certificate_Description":"Certificate Description",
+      "Uploading_Cert":"Uploading...",
+      "Upload_Certificate":"Upload Certificate",
+      "Cancel":"Cancel",
+      "Click_to_upload":"Click to upload",
+      "or_drag_and_drop":"or drag and drop",
+      "files_remaining":"files remaining"
+    },
+    "Cert_Edit_Dialog":{
+      "header":"Edit Certification",
+      "Certificate_Name":"Certificate Name",
+      "Certificate_Description":"Certificate Description",
+      "Updating_Cert":"Updating...",
+      "Update_Certificate":"Update Certificate",
+      "Cancel":"Cancel"
+    }
+    
+
+  },
+"LanguageSwitch":{
+  "Arabic":"Arabic",
+  "English":"English",
+  "Language":"Language"
+},
+"ProductSidebar":{
+  "Dashboard":"Dashboard",
+  "Products":"Products",
+  "Offers":"Offers",
+  "Reviews":"Reviews",
+  "Overview":"Overview",
+  "Settings":"Settings",
+  "Help-Center":"Help Center",
+  "ArciSpace":"ArciSpace",
+  "Need-Help":"Need Help?",
+  "contact":"Contact our support team for assistance",
+  "Contact-Support":"Contact Support"
+},
+"ProductHeader":{
+  "Search-products":"Search products..."
+},
+"ProductFilterPanel":{
+"Filters":"Filters",
+"Reset-all":" Reset all",
+"Active-Filters":"Active Filters",
+"Price-Range":"Price Range",
+"Min":"Min",
+"Max":"Max",
+"Colors":"Colors",
+"Select-colors":"Select colors...",
+"Search-colors":"Search colors...",
+"No-colors":"No colors found",
+"Clear-selection":"Clear selection",
+"Done":"Done",
+"Categories":"Categories",
+"Select-categories":"Select categories...",
+"Search-categories":"Search categories...",
+"No-categories":"No categories found"
+
+},
+"ProductCard":{
+"Stock":"Stock",
+"Dimensions":"Dimensions"
+},
+"ProductList":{
+"Error":"Error",
+"Development-Mod":"Development Mod",
+"AlertDescription":"Using mock data for development. In production, this would connect to the actual API.",
+"No-products-matching":"No products found matching your criteria."
+},
+"ProductDetails":{
+  "Loading-product":"Loading product details...",
+  "Error-Loading":"Error Loading Product",
+  "Unable-load":"Unable to load product details. Please try again later.",
+  "Close":"Close",
+  "Out-Stock":"Out of Stock",
+  "Low-Stock":"Low Stock",
+  "ID":"ID",
+  "Length":"Length",
+  "Width":"Width",
+  "Height":"Height",
+  "Category":"Category",
+  "Base-Unit":"Base Unit",
+  "View-Materials":"View Materials",
+  "Available-Colors":" Available Colors",
+  "in-stock":"in stock",
+  "Select-color":"Select a color to see availability and stock information.",
+  "Materials":"Materials",
+  "Code":"Code",
+  "Premium Materials":"Premium Materials",
+  "Materials-description":"This product is crafted with high-quality materials for durability and elegance.",
+  "details":"details",
+  "colors":"colors",
+  "materials":"materials"
+
+},
+"Edit-Product":{
+  "Loading-product":"Loading product data...",
+  "Error-Loading":"Error Loading Product",
+  "Unable-load.":"Unable to load product data. The product may not exist or you may not have permission to edit it.",
+  "Go Back":"Go Back"
+},
+"ProductForm":{
+  "businessType":"Business type is required",
+  "productNameEn":"Product name in English is required",
+  "productNameAr":"Product name in Arabic is required",
+  "price":"Price is required",
+  "valid-price":"is-valid-price",
+  "Price-must-number":"Price must be a valid number",
+  "baseUnit":"Base unit is required",
+  "descriptionEn":"Description in English is required",
+  "descriptionAr":"Description in Arabic is required",
+  "valid-length":"is-valid-length",
+  "length-must-number":"length must be a valid number",
+  "valid-width":"is-valid-width",
+  "width-must-number":"width must be a valid number",
+  "valid-height":"is-valid-height",
+  "height-must-number":"height must be a valid number",
+  "Preview":"Preview",
+  "Updating":"Updating...",
+  "submitting":"Submitting...",
+  "Update-Product":"Update Product",
+  "Submit":"Submit",
+  "Please-upload-least-one":"Please upload at least one product image",
+  "Product-updated-successfully":"Product updated successfully!",
+  "Product-added-successfully":"Product added successfully!",
+  "Failed-update":"ailed to update product. Please try again.",
+  "Failed-add":"ailed to add product. Please try again.",
+  "Loading-product-data":"Loading product data..."
+
+
+
+
+
+
+},
+"Product-basic-info":{
+  "Business-Type" :"Business Type",
+  "Select-business-type":"Select business type",
+  "Product-Name-(English)":"Product Name (English)",
+  "Product-Name-En":"Product Name En",
+  "Product-Name-(Arabic)":"Product Name (Arabic)",
+  "Product-Name-Ar":"Product Name Ar",
+  "Price":"Price",
+  "Base-Unit":"Base Unit",
+  "Base-unit-placeholder":"Base unit",
+  "Description-(English)":"Description (English)",
+  "Product-Description-En":"Product Description En",
+  "Description-(Arabic)":"Description (Arabic)",
+  "Product-Description-Ar":"Product Description Ar"
+
+},
+"materials-section":{
+  "Materials":"Materials",
+  "Add":"Add",
+  "Selected-Materials":"Selected Materials:",
+  "has-added":"has already been added"
+},
+"DimensionsSection":{
+ "Dimensions":"Dimensions",
+ "Length":"Length",
+ "Width":"Width",
+ "Height":"Height"
+},
+"ColorsAndStockSection":{
+"Please-select-color":"Please select a color",
+"Please-enter-stock-quantity":"Please enter stock quantity",
+"Stock-must-number":"Stock must be a number",
+"Stock-cannot-negative":"Stock cannot be negative",
+"color- already-added":"This color has already been added",
+"Colors-and-Stock":"Colors and Stock",
+"Colors":"Colors",
+"Stock":"Stock",
+"Add":"Add"
+
+},
+"ImageUploadSection":{
+  "Product-Images":"Product Images",
+  "Upload-Image":"Upload Image",
+  "drop-drag":"Or drop and drag",
+  "Add-More-Images":"Add More Images",
+  "Existing-Images":"Existing Images",
+  "New-Images":"New Images"
+},
+"Form-header":{
+"Edit-Product":"Edit Product",
+"Add-New-Product":"Add New Product",
+"Edit-description":"Update the product details below to modify this listing",
+"Add-description":"Fill Out The Details Below To List Your Product On The Application"
+},
+  "errors": {
+    "login_error": "An error occurred during login."
+  }
+}

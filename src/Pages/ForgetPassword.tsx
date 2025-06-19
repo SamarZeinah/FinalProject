@@ -1,6 +1,14 @@
 import { useState, useEffect, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertCircle, Check, Eye, EyeOff, Loader2, CheckCircle2, XCircle } from 'lucide-react';
+import {
+  AlertCircle,
+  Check,
+  Eye,
+  EyeOff,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -11,25 +19,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { OTPVerificationForm } from "../MyComponents/OTPVerificationForm";
 import { UserContext } from "../Contexts/UserContext";
-
-
-
-
-// Validation Schemas
-const emailValidationSchema = Yup.object().shape({
-  email: Yup.string()
-    .required("Email is required")
-    .email("Invalid email format"),
-});
-
-const newPasswordSchema = Yup.object().shape({
-  newPassword: Yup.string()
-    .required("Password is required")
-    .matches(/^.{8,}$/,"Password must be at least 8 characters"),
-  confirmPassword: Yup.string()
-    .required("Please confirm your password")
-    .oneOf([Yup.ref("newPassword")], "Passwords must match"),
-});
+import { useTranslation } from "react-i18next";
 
 // Animation Variants
 const pageVariants = {
@@ -56,9 +46,8 @@ interface AlertProps {
   message: string;
   isVisible: boolean;
   onClose: () => void;
-  type: 'success' | 'error';
+  type: "success" | "error";
 }
-
 
 function Alert({ message, isVisible, onClose, type }: AlertProps) {
   useEffect(() => {
@@ -79,14 +68,14 @@ function Alert({ message, isVisible, onClose, type }: AlertProps) {
           exit={{ opacity: 0, y: -50 }}
           transition={{ duration: 0.3 }}
           className="fixed z-50 top-4 w-full "
-          >
+        >
           <div className="text-center flex justify-center items-center">
             <div
               className={`px-6 py-4 rounded-lg shadow-lg flex items-center space-x-3 ${
-                type === 'success' ? 'bg-green-500' : 'bg-red-500'
+                type === "success" ? "bg-green-500" : "bg-red-500"
               } text-white`}
             >
-              {type === 'success' ? (
+              {type === "success" ? (
                 <CheckCircle2 className="w-6 h-6" />
               ) : (
                 <XCircle className="w-6 h-6" />
@@ -117,7 +106,7 @@ function ProgressStepper({
     <div className="w-full max-w-md mx-auto mb-8">
       <div className="relative flex justify-between">
         <div className="absolute top-4 left-0 w-full h-[2px] bg-muted -z-10" />
-        
+
         {steps.map((step, index) => (
           <div key={step} className="relative flex flex-col items-center">
             <div
@@ -158,18 +147,28 @@ function EmailStep({
   setAlert,
 }: {
   onNext: (email: string) => void;
-  setAlert: (alert: { show: boolean; message: string; type: "success" | "error" }) => void;
+  setAlert: (alert: {
+    show: boolean;
+    message: string;
+    type: "success" | "error";
+  }) => void;
 }) {
-
   const userContext = useContext(UserContext);
   if (!userContext) {
     throw new Error("UserContext must be used within a UserContextProvider");
   }
-  const { pathUrl} = userContext;
+  const { pathUrl } = userContext;
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const { t, i18n } = useTranslation();
+  // Email Validation Schemas
+  const emailValidationSchema = Yup.object().shape({
+    email: Yup.string()
+      .required(t("forgot_password.validationSchema.email.required"))
+      .email(t("forgot_password.validationSchema.email.email")),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -184,13 +183,13 @@ function EmailStep({
           `${pathUrl}/api/v1/auth/send-otp?email=${values.email}`,
           {},
           {
-            headers: { "Accept-Language": "en" },
+            headers: { "Accept-Language": i18n.language },
           }
         );
         if (data.success) {
           setAlert({
             show: true,
-            message: data.data || "Verification code sent successfully",
+            message: data.data || t("forgot_password.code_sent"),
             type: "success",
           });
           setTimeout(() => onNext(values.email), 3000);
@@ -200,7 +199,8 @@ function EmailStep({
       } catch (err: any) {
         setAlert({
           show: true,
-          message: err.response?.data?.message || "Failed to send verification code",
+          message:
+            err.response?.data?.message || t("forgot_password.code_failed"),
           type: "error",
         });
       } finally {
@@ -212,20 +212,24 @@ function EmailStep({
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold text-center">Forgot Password</h2>
+        <h2 className="text-2xl font-semibold text-center">
+          {t("forgot_password.title")}
+        </h2>
         <p className="text-sm text-center text-gray-600">
-          Enter your email to receive a verification code
+          {t("forgot_password.enter_email")}
         </p>
       </div>
       <div className="space-y-2">
         <Input
           type="email"
           name="email"
-          placeholder="Enter your email"
+          placeholder={t("forgot_password.email_placeholder")}
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className={formik.touched.email && formik.errors.email ? "border-red-500" : ""}
+          className={
+            formik.touched.email && formik.errors.email ? "border-red-500" : ""
+          }
         />
         <AnimatePresence>
           {(formik.touched.email && formik.errors.email) || error ? (
@@ -253,63 +257,83 @@ function EmailStep({
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Sending...
+            {t("forgot_password.load_Verification_btn")}
           </>
         ) : (
-          "Send Verification Code"
+          t("forgot_password.Verification_btn")
         )}
       </Button>
       <p className="text-sm text-center">
-        <span className="text-gray-600">Don't have an account? </span>
+        <span className="text-gray-600">
+          {t("forgot_password.no_account_text")}{" "}
+        </span>
         <Link to="/signup" className="font-medium text-primary hover:underline">
-          Create a new account
+          {t("forgot_password.create_account_link")}
         </Link>
       </p>
     </div>
   );
 }
 
-
 // Verification Step Component
-function VerificationStep({ onNext, email, setAlert }: { onNext: (code: string) => void, email: string, setAlert: (alert: {show: boolean, message: string, type: 'success' | 'error'}) => void }) {
-
+function VerificationStep({
+  onNext,
+  email,
+  setAlert,
+}: {
+  onNext: (code: string) => void;
+  email: string;
+  setAlert: (alert: {
+    show: boolean;
+    message: string;
+    type: "success" | "error";
+  }) => void;
+}) {
+  const { t, i18n } = useTranslation();
   const userContext = useContext(UserContext);
 
-if (!userContext) {
-  throw new Error("UserContext must be used within a UserContextProvider");
-}
-const { pathUrl} = userContext;
-
-
+  if (!userContext) {
+    throw new Error("UserContext must be used within a UserContextProvider");
+  }
+  const { pathUrl } = userContext;
 
   const handleVerifyCode = async (code: string) => {
     try {
-      const { data } = await axios.post(`${pathUrl}/api/v1/auth/activate-the-account?email=${email}&otp=${code}`, {}, {
-        headers: {
-          'Accept-Language': 'en'
+      const { data } = await axios.post(
+        `${pathUrl}/api/v1/auth/activate-the-account?email=${email}&otp=${code}`,
+        {},
+        {
+          headers: {
+            "Accept-Language": i18n.language,
+          },
         }
-      });
+      );
       if (data.success) {
-        setAlert({show: true, message: data.data || "Verification successful", type: 'success'});
+        setAlert({
+          show: true,
+          message: data.data || t("forgot_password.Verification_successful"),
+          type: "success",
+        });
         setTimeout(() => onNext(code), 3000);
       } else {
-        setAlert({show: true, message: data.message, type: 'error'});
+        setAlert({ show: true, message: data.message, type: "error" });
       }
     } catch (err: any) {
-      throw new Error(err.response?.data?.message || "Failed to verify code");
+      throw new Error(
+        err.response?.data?.message || t("forgot_password.Failed_verify_code")
+      );
     }
   };
 
   return (
     <OTPVerificationForm
       onSubmit={handleVerifyCode}
-      title="Verification Code"
-      subtitle="Enter the verification code we sent to your email"
-      buttonText="Verify Code"
+      title={t("forgot_password.verification_title")}
+      subtitle={t("forgot_password.verification_subtitle")}
+      buttonText={t("forgot_password.verification_buttonText")}
     />
   );
 }
-
 
 // New Password Step Component
 function NewPasswordStep({
@@ -319,19 +343,39 @@ function NewPasswordStep({
 }: {
   email: string;
   onNext: (password: string) => void;
-  setAlert: (alert: { show: boolean; message: string; type: "success" | "error" }) => void;
+  setAlert: (alert: {
+    show: boolean;
+    message: string;
+    type: "success" | "error";
+  }) => void;
 }) {
-
   const userContext = useContext(UserContext);
   if (!userContext) {
     throw new Error("UserContext must be used within a UserContextProvider");
   }
-  const { pathUrl} = userContext;
+  const { pathUrl } = userContext;
 
   const [isLoading, setIsLoading] = useState(false);
   const [showPasswords, setShowPasswords] = useState({
     new: false,
     confirm: false,
+  });
+
+  //Validation Schemas
+  const { t, i18n } = useTranslation();
+  const newPasswordSchema = Yup.object().shape({
+    newPassword: Yup.string()
+      .required(t("forgot_password.validationSchema.newPassword.required"))
+      .matches(
+        /^.{8,}$/,
+        t("forgot_password.validationSchema.newPassword.matches.message")
+      ),
+    confirmPassword: Yup.string()
+      .required(t("forgot_password.validationSchema.ConfirmPassword.required"))
+      .oneOf(
+        [Yup.ref("newPassword")],
+        t("forgot_password.validationSchema.ConfirmPassword.message")
+      ),
   });
 
   // API Configuration
@@ -351,12 +395,17 @@ function NewPasswordStep({
           {},
           {
             headers: {
-              "Accept-Language": "en",
+              "Accept-Language": i18n.language,
             },
           }
         );
         if (data.success) {
-          setAlert({ show: true, message: data.data || "Password reset successful", type: "success" });
+          setAlert({
+            show: true,
+            message:
+              data.data || t("forgot_password.Password_reset_successful"),
+            type: "success",
+          });
           setTimeout(() => {
             onNext(values.newPassword);
             navigate("/client");
@@ -367,7 +416,9 @@ function NewPasswordStep({
       } catch (err: any) {
         setAlert({
           show: true,
-          message: err.response?.data?.message || "Failed to reset password",
+          message:
+            err.response?.data?.message ||
+            t("forgot_password.Failed_reset_password"),
           type: "error",
         });
       } finally {
@@ -379,8 +430,12 @@ function NewPasswordStep({
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold text-center">New Password</h2>
-        <p className="text-sm text-center text-gray-600">Enter your new password</p>
+        <h2 className="text-2xl font-semibold text-center">
+          {t("forgot_password.New_Password_Title")}
+        </h2>
+        <p className="text-sm text-center text-gray-600">
+          {t("forgot_password.New_Password_Dec")}
+        </p>
       </div>
       <div className="space-y-4">
         <div className="space-y-2">
@@ -388,20 +443,28 @@ function NewPasswordStep({
             <Input
               type={showPasswords.new ? "text" : "password"}
               name="newPassword"
-              placeholder="New password"
+              placeholder={t("forgot_password.New_Password_Placeholder")}
               value={formik.values.newPassword}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`pr-10 ${
-                formik.touched.newPassword && formik.errors.newPassword ? "border-red-500" : ""
+                formik.touched.newPassword && formik.errors.newPassword
+                  ? "border-red-500"
+                  : ""
               }`}
             />
             <button
               type="button"
-              onClick={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
+              onClick={() =>
+                setShowPasswords({ ...showPasswords, new: !showPasswords.new })
+              }
               className="absolute right-3 top-1/2 -translate-y-1/2"
             >
-              {showPasswords.new ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showPasswords.new ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </button>
           </div>
           {formik.touched.newPassword && formik.errors.newPassword && (
@@ -421,22 +484,31 @@ function NewPasswordStep({
             <Input
               type={showPasswords.confirm ? "text" : "password"}
               name="confirmPassword"
-              placeholder="Confirm password"
+              placeholder={t("forgot_password.Confirm_Password_Placeholder")}
               value={formik.values.confirmPassword}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`pr-10 ${
-                formik.touched.confirmPassword && formik.errors.confirmPassword ? "border-red-500" : ""
+                formik.touched.confirmPassword && formik.errors.confirmPassword
+                  ? "border-red-500"
+                  : ""
               }`}
             />
             <button
               type="button"
               onClick={() =>
-                setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })
+                setShowPasswords({
+                  ...showPasswords,
+                  confirm: !showPasswords.confirm,
+                })
               }
               className="absolute right-3 top-1/2 -translate-y-1/2"
             >
-              {showPasswords.confirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showPasswords.confirm ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </button>
           </div>
           {formik.touched.confirmPassword && formik.errors.confirmPassword && (
@@ -463,10 +535,10 @@ function NewPasswordStep({
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Resetting Password...
+            {t("forgot_password.Resetting_btn")}
           </>
         ) : (
-          "Reset Password"
+          t("forgot_password.Reset_btn")
         )}
       </Button>
     </div>
@@ -475,15 +547,24 @@ function NewPasswordStep({
 
 // Main component
 export default function ForgetPassword() {
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
   const [data, setData] = useState({
     email: "",
     verificationCode: "",
     newPassword: "",
   });
-  const [alert, setAlert] = useState({ show: false, message: '', type: 'success' as 'success' | 'error' });
+  const [alert, setAlert] = useState({
+    show: false,
+    message: "",
+    type: "success" as "success" | "error",
+  });
 
-  const steps = ["Email", "Verify", "Password"];
+  const steps = [
+    t("forgot_password.Email_Step"),
+    t("forgot_password.Verify_Step"),
+    t("forgot_password.Password_Step"),
+  ];
 
   const handleNext = (stepData: any) => {
     switch (step) {
@@ -501,7 +582,6 @@ export default function ForgetPassword() {
         break;
     }
   };
-
 
   return (
     <div className="min-h-screen flex bg-gray-50">
@@ -538,11 +618,19 @@ export default function ForgetPassword() {
                 exit="exit"
                 transition={{ duration: 0.3 }}
               >
-                {step === 1 && <EmailStep onNext={handleNext} setAlert={setAlert} />}
-                {step === 2 && <VerificationStep onNext={handleNext} email={data.email} setAlert={setAlert} />}
+                {step === 1 && (
+                  <EmailStep onNext={handleNext} setAlert={setAlert} />
+                )}
+                {step === 2 && (
+                  <VerificationStep
+                    onNext={handleNext}
+                    email={data.email}
+                    setAlert={setAlert}
+                  />
+                )}
                 {step === 3 && (
-                  <NewPasswordStep 
-                    email={data.email} 
+                  <NewPasswordStep
+                    email={data.email}
                     onNext={handleNext}
                     setAlert={setAlert}
                   />
@@ -562,4 +650,3 @@ export default function ForgetPassword() {
     </div>
   );
 }
-

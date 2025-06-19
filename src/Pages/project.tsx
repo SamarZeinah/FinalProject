@@ -9,13 +9,14 @@ import { useParams } from "react-router-dom";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { IFormData, IProjectData } from "@/interfaces";
 import ProjectCard from "@/MyComponents/Project-Card.tsx";
+import { useTranslation } from "react-i18next";
 
 export default function Project() {
   const { projectId } = useParams();
   const queryClient = useQueryClient();
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
-
+  const{t,i18n}=useTranslation();
   if (!userContext) {
     throw new Error("UserContext must be used within a UserContextProvider");
   }
@@ -26,7 +27,7 @@ export default function Project() {
   function getProjectById() {
     return axios.get(`${pathUrl}/api/v1/project/${projectId}`, {
       headers: {
-        "Accept-Language": "en",
+        "Accept-Language": i18n.language,
         Authorization: `Bearer ${userToken}`,
       },
     });
@@ -76,7 +77,7 @@ export default function Project() {
         apiFormData,
         {
           headers: {
-            "Accept-Language": "en",
+            "Accept-Language": i18n.language,
             Authorization: `Bearer ${userToken}`,
             "Content-Type": "multipart/form-data",
           },
@@ -86,7 +87,7 @@ export default function Project() {
       if (data.success) {
         await queryClient.invalidateQueries(["project", projectId]);
 
-        toast.success("🎉 Project updated successfully!", {
+        toast.success(t('addProject.Project_updated_successfully'), {
           duration: 2000,
           position: "top-center",
         });
@@ -97,8 +98,8 @@ export default function Project() {
         throw new Error(data.message || "Failed to update project");
       }
     } catch (error) {
-      console.error("Error updating project:", error);
-      toast.error("❌ Failed to update project", {
+      console.error(t('addProject.Error_updating_project'), error);
+      toast.error(t('addProject.Failed_update_project'), {
         duration: 2000,
         position: "top-center",
       });
@@ -121,7 +122,7 @@ export default function Project() {
       );
 
       if (data.success) {
-        toast.success("🗑️ Project deleted successfully!", {
+        toast.success(t('addProject.Project_deleted_successfully'), {
           duration: 2000,
           position: "top-center",
         });
@@ -129,11 +130,11 @@ export default function Project() {
           navigate("/profile");
         }, 1000);
       } else {
-        throw new Error(data.message || "Failed to delete project");
+        throw new Error(data.message || t('addProject.Failed_delete_project'));
       }
     } catch (error) {
-      console.error("Error deleting project:", error);
-      toast.error("⚠️ Failed to delete project", {
+      console.error(t('addProject.Error_deleting_project'), error);
+      toast.error(t('addProject.Failed_delete_project'), {
         duration: 2000,
         position: "top-center",
       });

@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "react-i18next";
 
 interface IService {
   id: number,
@@ -25,7 +26,7 @@ export default function MultiSelectOption({
   selectedServices,
   setSelectedServices,
 }: MultiSelectProps) {
-
+const{t}=useTranslation();
   const handleValueChange = (value: string) => {
     const selectedService = userServices.find((s) => s.id.toString() === value);
     if (!selectedService) return;
@@ -49,17 +50,17 @@ export default function MultiSelectOption({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor="services">Services</Label>
+      <Label htmlFor="services">{t('ProfileEditor.Services')}</Label>
 
       {/* Multi-Select Dropdown */}
       <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select Services" />
+          <SelectValue placeholder={t('ProfileEditor.Services_placeholder')} />
         </SelectTrigger>
         <SelectContent>
           {userServices.map((service) => (
             <SelectItem key={service.id} value={service.id.toString()}>
-              {service.nameEn} {/* Display English Name */}
+              {service.name} {/* Display English Name */}
             </SelectItem>
           ))}
         </SelectContent>
@@ -69,7 +70,7 @@ export default function MultiSelectOption({
       <div className="flex flex-wrap gap-2 mt-2">
         {selectedServices.map((service) => (
           <Badge key={service.id} variant="secondary" className="px-2 py-1">
-            {service.nameEn} {/* Display English Name */}
+            {service.name} {/* Display English Name */}
             <button onClick={() => removeService(service.id)} className="ml-1 hover:text-destructive">
               <X size={14} />
             </button>

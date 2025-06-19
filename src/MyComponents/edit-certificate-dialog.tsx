@@ -8,6 +8,7 @@ import axios from "axios";
 import { UserContext } from "@/Contexts/UserContext";
 import { Input } from "@/components/ui/input";
 import Alert from "./Alert";
+import { t } from "i18next";
 
 interface EditCertificateDialogProps {
   open: boolean;
@@ -176,7 +177,7 @@ export function EditCertificateDialog({ open, onOpenChange, selectedCert, onEdit
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-white p-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Edit Certification</h2>
+            <h2 className="text-xl font-semibold">{t('Sidebar.Cert_Edit_Dialog.header')} </h2>
           </div>
 
           <div className="mt-4">
@@ -188,7 +189,7 @@ export function EditCertificateDialog({ open, onOpenChange, selectedCert, onEdit
           </div>
 
           <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700">Certificate Name</label>
+            <label className="block text-sm font-medium text-gray-700">{t('Sidebar.Cert_Edit_Dialog.Certificate_Name')}</label>
             <Input
               type="text"
               value={certificateName}
@@ -198,7 +199,7 @@ export function EditCertificateDialog({ open, onOpenChange, selectedCert, onEdit
           </div>
 
           <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700">Certificate Description</label>
+            <label className="block text-sm font-medium text-gray-700">{t('Sidebar.Cert_Edit_Dialog.Certificate_Description')}</label>
             <Input
               value={certificateDescription}
               onChange={(e) => setCertificateDescription(e.target.value)}
@@ -213,14 +214,14 @@ export function EditCertificateDialog({ open, onOpenChange, selectedCert, onEdit
               className="bg-white hover:bg-gray-100"
               disabled={loading}
             >
-              Cancel
+              {t('Sidebar.Cert_Edit_Dialog.Cancel')}
             </Button>
             <Button
               onClick={handleUpdate}
               className="bg-gray-900 hover:bg-gray-800"
               disabled={!certificateName.trim() || !certificateDescription.trim() || loading}
             >
-              {loading ? "Updating..." : "Update Certificate"}
+              {loading ? t('Sidebar.Cert_Edit_Dialog.Updating_Cert') : t('Sidebar.Cert_Edit_Dialog.Update_Certificate')}
             </Button>
           </div>
 

@@ -10,12 +10,14 @@ import { IFormData } from "@/interfaces";
 import ProjectForm from "./project-form";
 import { Toaster } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 interface AddProjectProps {
   onClose: () => void;
 }
 
 export default function AddProject({ onClose }: AddProjectProps) {
+  const{t}=useTranslation();
   const queryClient = useQueryClient();
 
   const userContext = useContext(UserContext);
@@ -71,7 +73,7 @@ export default function AddProject({ onClose }: AddProjectProps) {
                 await queryClient.invalidateQueries(["projects"])
         setShowConfirmDialog(false);
         onClose();
-        toast.success("🚀 Project created successfully!", {
+        toast.success(t('addProject.Project_created_successfully'), {
           duration: 2000,
           position: "top-center",
           style: {
@@ -86,11 +88,11 @@ export default function AddProject({ onClose }: AddProjectProps) {
           },
         });
       } else {
-        throw new Error(data.message || "Failed to create project");
+        throw new Error(data.message || t('addProject.Failed_create_project'));
       }
     } catch (error) {
-      console.error("Error creating project:", error);
-      toast.error("💥 Failed to create project", {
+      console.error(t('addProject.Error_creating_project'), error);
+      toast.error(t('addProject.Failed_create_project'), {
         duration: 2000,
         position: "top-center",
         style: {
@@ -114,7 +116,7 @@ export default function AddProject({ onClose }: AddProjectProps) {
       <div className="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-lg">
         <div className="p-6">
           <div className="flex flex-row items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">Add New Project</h2>
+            <h2 className="text-2xl font-bold">{t('addProject.title')}</h2>
             <Button variant="ghost" size="icon" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
@@ -131,10 +133,10 @@ export default function AddProject({ onClose }: AddProjectProps) {
         showConfirmDialog={showConfirmDialog}
         setShowConfirmDialog={setShowConfirmDialog}
         handleConfirm={handleConfirmedSubmit}
-        title="Are you sure you want to create this Project?"
-        desc="Please review your project details before confirming. This action will create a new project with the provided information."
-        confirmText="Yes, create project"
-        cancelText="Cancel"
+        title={t('addProject.ConfirmDialog_title')}
+        desc={t('addProject.ConfirmDialog_desc')}
+        confirmText={t('addProject.ConfirmDialog_confirmText')}
+        cancelText={t('addProject.ConfirmDialog_cancelText')}
         isLoading={isLoading}
       />
 

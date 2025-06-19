@@ -6,7 +6,6 @@ import { UserContext } from "@/Contexts/UserContext";
 import AddProject from "@/MyComponents/add-project";
 
 export default function Profile() {
-
   const userContext = useContext(UserContext);
   if (!userContext) {
     throw new Error("UserContext must be used within a UserContextProvider");
@@ -48,7 +47,7 @@ export default function Profile() {
   }, [showAddProject]) // Removed unnecessary setShowAddProject dependency
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div id="profile-page"  className="min-h-screen bg-gray-50">
       {/* Add Project */}
       {showAddProject && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 overflow-auto">
@@ -71,13 +70,14 @@ export default function Profile() {
 
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 py-6">
-        <div className="flex flex-col gap-6 md:flex-row">
+        <div className="flex flex-col gap-6 md:flex-row">          
           <Sidebar />
           <main className="flex-1">
             <PortfolioGrid />
           </main>
         </div>
       </div>
+      
     </div>
   )
 }

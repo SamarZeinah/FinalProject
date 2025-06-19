@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Upload, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import toast from "react-hot-toast"
+import { useTranslation } from "react-i18next"
 
 interface FileUploadProps {
   maxFiles: number
@@ -14,6 +15,7 @@ interface FileUploadProps {
 
 export function FileUpload({ maxFiles, accept, onChange, value = [] }: FileUploadProps) {
   const [files, setFiles] = useState<File[]>(value)
+  const{t}=useTranslation();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(e.target.files || [])
@@ -34,7 +36,6 @@ export function FileUpload({ maxFiles, accept, onChange, value = [] }: FileUploa
     setFiles(updatedFiles)
     onChange?.(updatedFiles)
   }
-
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-center w-full">
@@ -42,9 +43,9 @@ export function FileUpload({ maxFiles, accept, onChange, value = [] }: FileUploa
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
             <Upload className="w-8 h-8 mb-2 text-gray-500" />
             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              <span className="font-semibold">Click to upload</span> or drag and drop
+              <span className="font-semibold">{t('Sidebar.Cert_Add_Dialog.Click_to_upload')}</span> {t('Sidebar.Cert_Add_Dialog.or_drag_and_drop')}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">{maxFiles - files.length} files remaining</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{maxFiles - files.length} {t('Sidebar.Cert_Add_Dialog.files_remaining')}</p>
           </div>
           <input
             type="file"

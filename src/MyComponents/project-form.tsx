@@ -18,7 +18,8 @@ import {
 } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
 import { IFormData, ProjectImage } from "@/interfaces";
-
+import { useTranslation } from "react-i18next";
+import { ar, enUS } from "date-fns/locale";
 interface ProjectFormProps {
   onSubmit: (data: IFormData) => Promise<void>;
   defaultValues?: Partial<IFormData>;
@@ -38,15 +39,16 @@ export default function ProjectForm({
   isLoading,
   setIsLoading,
 }: ProjectFormProps) {
+  const{t,i18n}=useTranslation();
   const formSchema = z.object({
-    name: z.string().min(1, "Project name is required"),
-    description: z.string().min(1, "Description is required"),
-    startDate: z.date({ required_error: "Start date is required" }),
-    endDate: z.date({ required_error: "End date is required" }),
-    tools: z.string().min(1, "Tools are required"),
+    name: z.string().min(1,t('addProject.formSchema.name')),
+    description: z.string().min(1,t('addProject.formSchema.description')),
+    startDate: z.date({ required_error: t('addProject.formSchema.startDate') }),
+    endDate: z.date({ required_error: t('addProject.formSchema.endDate') }),
+    tools: z.string().min(1,t('addProject.formSchema.tools')),
     images: isEditing
       ? z.array(z.instanceof(File))
-      : z.array(z.instanceof(File)).nonempty("At least one image is required"),
+      : z.array(z.instanceof(File)).nonempty(t('addProject.formSchema.images')),
   });
 
   type ProjectFormData = z.infer<typeof formSchema>;
@@ -271,7 +273,7 @@ export default function ProjectForm({
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="name">Project Name</Label>
+        <Label htmlFor="name">{t('addProject.Project_Name')}</Label>
         <Input id="name" {...form.register("name")} />
         {form.formState.errors.name && (
           <p className="text-sm text-destructive">
@@ -281,7 +283,7 @@ export default function ProjectForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t('addProject.Description')}</Label>
         <Textarea id="description" {...form.register("description")} />
         {form.formState.errors.description && (
           <p className="text-sm text-destructive">
@@ -292,8 +294,8 @@ export default function ProjectForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2 calender">
-          <Label>Start Date</Label>
-          <Popover>
+          <Label>{t('addProject.Start_Date')}</Label>
+          {/* <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
@@ -302,7 +304,7 @@ export default function ProjectForm({
                 }`}
               >
                 <Calendar className="mr-2 h-4 w-4" />
-                {startDate ? format(startDate, "PPP") : "Pick a date"}
+                {startDate ? format(startDate, "PPP") : t('addProject.Start_Date_Placeholder')}
               </Button>
             </PopoverTrigger>
             <PopoverContent
@@ -321,7 +323,38 @@ export default function ProjectForm({
                 initialFocus
               />
             </PopoverContent>
+          </Popover> */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={`w-full justify-start text-left font-normal ${
+                  !startDate && "text-muted-foreground"
+                }`}
+              >
+                <Calendar className="mr-2 h-4 w-4" />
+                {startDate ? format(startDate, "PPP", { locale: i18n.language === "ar" ? ar : enUS }) : t('addProject.Start_Date_Placeholder')}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-auto p-0 date-picker-popup"
+              align="start"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <CalendarComponent
+                mode="single"
+                selected={startDate}
+                onSelect={(date) => {
+                  form.setValue("startDate", date as Date);
+                  form.clearErrors("startDate");
+                }}
+                disabled={{ after: maxDate }}
+                initialFocus
+                locale={i18n.language === "ar" ? ar : enUS}  
+              />
+            </PopoverContent>
           </Popover>
+
           {form.formState.errors.startDate && (
             <p className="text-sm text-destructive">
               {form.formState.errors.startDate.message}
@@ -330,8 +363,8 @@ export default function ProjectForm({
         </div>
 
         <div className="space-y-2 calender">
-          <Label>End Date</Label>
-          <Popover>
+          <Label> {t('addProject.End_Date')}</Label>
+          {/* <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
@@ -340,7 +373,7 @@ export default function ProjectForm({
                 }`}
               >
                 <Calendar className="mr-2 h-4 w-4" />
-                {endDate ? format(endDate, "PPP") : "Pick a date"}
+                {endDate ? format(endDate, "PPP") :  t('addProject.End_Date_Placeholder')}
               </Button>
             </PopoverTrigger>
             <PopoverContent
@@ -357,9 +390,41 @@ export default function ProjectForm({
                 }}
                 disabled={{ before: startDate }}
                 initialFocus
+                
+              />
+            </PopoverContent>
+          </Popover> */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={`w-full justify-start text-left font-normal ${
+                  !endDate && "text-muted-foreground"
+                }`}
+              >
+                <Calendar className="mr-2 h-4 w-4" />
+                {endDate ? format(endDate, "PPP", { locale: i18n.language === "ar" ? ar : enUS }) : t('addProject.End_Date_Placeholder')}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-auto p-0 date-picker-popup"
+              align="start"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <CalendarComponent
+                mode="single"
+                selected={endDate}
+                onSelect={(date) => {
+                  form.setValue("endDate", date as Date);
+                  form.clearErrors("endDate");
+                }}
+                disabled={{ before: startDate }}
+                initialFocus
+                locale={i18n.language === "ar" ? ar : enUS}  
               />
             </PopoverContent>
           </Popover>
+
           {form.formState.errors.endDate && (
             <p className="text-sm text-destructive">
               {form.formState.errors.endDate.message}
@@ -369,7 +434,7 @@ export default function ProjectForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="tools">Tools Used</Label>
+        <Label htmlFor="tools">{t('addProject.Tools_Used')}</Label>
         <Input id="tools" {...form.register("tools")} />
         {form.formState.errors.tools && (
           <p className="text-sm text-destructive">
@@ -379,7 +444,7 @@ export default function ProjectForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="cover">Cover Image</Label>
+        <Label htmlFor="cover">{t('addProject.Cover_Image')}</Label>
         <Input
           id="cover"
           type="file"
@@ -407,7 +472,7 @@ export default function ProjectForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="images">Project Images</Label>
+        <Label htmlFor="images">{t('addProject.Project_Images')}</Label>
         <Input
           id="images"
           type="file"
@@ -420,10 +485,10 @@ export default function ProjectForm({
             {form.formState.errors.images.message}
           </p>
         )}
-
+                         {/* ############ */}
         {isEditing && remainingExistingImages.length > 0 && (
           <div className="mt-4">
-            <Label>Existing Images</Label>
+            <Label>{t('addProject.Existing_Images')}</Label>
             <div className="mt-2 grid grid-cols-2 md:grid-cols-3 gap-4">
               {remainingExistingImages.map((image, index) => (
                 <div
@@ -452,7 +517,7 @@ export default function ProjectForm({
 
         {projectPreviews.length > 0 && (
           <>
-            <Label className="mt-4">New Images</Label>
+            <Label className="mt-4">{t('addProject.New_Images')}</Label>
             <div className="mt-2 grid grid-cols-2 md:grid-cols-3 gap-4">
               {projectPreviews.map((preview, index) => (
                 <div
@@ -483,12 +548,12 @@ export default function ProjectForm({
         {isLoading ? (
           <div className="flex items-center gap-2">
             <Loader2 className="h-4 w-4 animate-spin" />
-            {defaultValues ? "Updating Project..." : "Creating Project..."}
+            {defaultValues ? t('addProject.Updating_btn') : t('addProject.Creating_btn') }
           </div>
         ) : defaultValues ? (
-          "Edit Project"
+          t('addProject.Edit_btn')
         ) : (
-          "Create Project"
+          t('addProject.Create')
         )}
       </Button>
     </form>

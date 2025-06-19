@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Lock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const BackgroundSlider = () => {
   const images = [
@@ -40,6 +41,7 @@ const BackgroundSlider = () => {
 };
 
 const LoginAnimation = () => {
+  const{t}=useTranslation();
   return (
     <div className="relative w-full h-full overflow-hidden">
       <BackgroundSlider />
@@ -71,9 +73,9 @@ const LoginAnimation = () => {
           transition={{ duration: 1, delay: 0.5 }}
           className="text-center text-white"
         >
-          <h2 className="text-4xl font-bold mb-4">Welcome to Home4U</h2>
+          <h2 className="text-4xl font-bold mb-4">{t('Client.photo_head')}</h2>
           <p className="text-xl">
-            Your smart home ecosystem for household appliances and tools
+          {t('Client.photo_Dec')}
           </p>
         </motion.div>
       </div>
@@ -82,6 +84,7 @@ const LoginAnimation = () => {
 };
 
 export default function Client() {
+  const{t}=useTranslation();
   const location = useLocation();
   const [logIn, setLogIn] = useState(true);
 
@@ -110,7 +113,7 @@ export default function Client() {
               }`}
               onClick={() => setLogIn(true)}
             >
-              Log in
+              {t('Client.Login_Tap')}
             </Link>
             <Link
               to="signup"
@@ -119,7 +122,7 @@ export default function Client() {
               }`}
               onClick={() => setLogIn(false)}
             >
-              Sign up
+              {t('Client.Sign_Tap')}
             </Link>
           </div>
           <Outlet />

@@ -31,6 +31,7 @@ import { UserContext } from "@/Contexts/UserContext";
 import axios from "axios";
 import { IServices, IUser } from "@/interfaces";
 import Alert from "./Alert";
+import { useTranslation } from "react-i18next";
 
 
 export function AddServiceDialog({
@@ -47,23 +48,35 @@ export function AddServiceDialog({
     show: boolean;
   } | null>(null);
 
-  let user_type = localStorage.getItem("user-type");
-  user_type = user_type ? user_type.replace(/\s+/g, "-") : null;
+  let user_type = localStorage.getItem("user-type");   
+  // user_type = user_type ? user_type.replace(/\s+/g, "-") : null;
   const userContext = useContext(UserContext);
   if (!userContext) {
     throw new Error("UserContext must be used within a UserContextProvider");
   }
-  const { userToken, pathUrl } = userContext;
+  const { userToken, pathUrl} = userContext;
+  const{t,i18n}=useTranslation();
+
+  let apiUrl;    
+  if (user_type === "عامل فني" || user_type === "technical worker") {
+    apiUrl = `${pathUrl}/api/v1/technical-worker-services/service/${userData?.type?.id}` ;
+  } else {
+    apiUrl = `${pathUrl}/api/v1/engineer-services/service/${userData?.type?.id}`;
+  }
   //fetchServices
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const { data } = await axios.get(
-          `${pathUrl}/api/v1/${user_type}-services/service/${userData?.type?.id}`,
+        const { data } = await axios.get(apiUrl,
+          // `${pathUrl}/api/v1/${user_type}-services/service/${userData?.type?.id}`,
+          // `${pathUrl}/api/v1/engineer-services/service/${userData?.type?.id}`,
+          // `${pathUrl}/api/v1/technical-worker-services/service/${userData?.type?.id}`,
+
+
           {
             headers: {
               Authorization: `Bearer ${userToken}`,
-              "Accept-Language": "en",
+              "Accept-Language": i18n.language,
             },
           }
         );
@@ -84,7 +97,8 @@ export function AddServiceDialog({
     };
 
     fetchServices();
-  }, [userData?.type?.id, userToken, pathUrl, user_type]);
+  }, [userData?.type?.id, userToken, pathUrl, user_type,i18n.language]);
+
   //Add Services
   const handleAddService = async () => {
     if (!selected) return;
@@ -93,16 +107,17 @@ export function AddServiceDialog({
       (service) => service.id === selected
     );
     if (!selectedService) return;
-
+console.log("user_typeuser_type",user_type)
     const userServiceField =
-      user_type === "technical-worker" ? "workerServs" : "engineerServ";
-    const isAlreadyAdded = userData?.[userServiceField]?.some(
+      // user_type === "technical-worker" ? "workerServs" : "engineerServ";
+      user_type === "technical worker" || user_type === "عامل فني" ? "workerServs" : "engineerServ";
+      const isAlreadyAdded = userData?.[userServiceField]?.some(
       (service) => service.code === selectedService.code
     );
 
     if (isAlreadyAdded) {
       setAlert({
-        message: "Service already exists in the list",
+        message:t('Sidebar.Services_Add_DialogContent.Services_Exists'),
         type: "error",
         show: true,
       });
@@ -114,22 +129,30 @@ export function AddServiceDialog({
       selectedService,
     ];
     const payload = { ...userData, [userServiceField]: updatedUserService };
-
+    let updateType;    
+    if (user_type === "عامل فني" || user_type === "technical worker") {
+      updateType = `${pathUrl}/api/v1/technical-workers` ;
+    } else {
+      updateType = `${pathUrl}/api/v1/engineers`
+    }
+console.log("user_type from add",user_type);
     try {
       const response = await axios.put(
-        `${pathUrl}/api/v1/${user_type}s`,
+        updateType,
+        // `${pathUrl}/api/v1/${user_type}s`,
         payload,
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
             "Content-Type": "application/json",
+            "Accept-Language": i18n.language,
           },
         }
       );
 
       setSelected("");
       setAlert({
-        message: "Service added successfully!",
+        message:t('Sidebar.Services_Add_DialogContent.Services_added'),
         type: "success",
         show: true,
       });
@@ -141,8 +164,8 @@ export function AddServiceDialog({
 
       onAdd(response.data);
     } catch (error) {
-      console.error("Error adding service:", error);
-      setAlert({ message: "Error adding service", type: "error", show: true });
+      console.error(t('Sidebar.Services_Add_DialogContent.error_adding'), error);
+      setAlert({ message:t('Sidebar.Services_Add_DialogContent.error_adding'), type: "error", show: true });
     }
   };
 
@@ -155,7 +178,7 @@ export function AddServiceDialog({
       <DialogContent className="max-w-md border-none bg-white p-6 shadow-none">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">
-            Add Service
+          {t('Sidebar.Services_Add_DialogContent.Add_Service_btn')}
           </DialogTitle>
         </DialogHeader>
 
@@ -171,12 +194,13 @@ export function AddServiceDialog({
         <div className="mt-6">
           <Select value={selected} onValueChange={setSelected}>
             <SelectTrigger className="h-12">
-              <SelectValue placeholder="Select a service" />
+              <SelectValue placeholder={t('Sidebar.Services_Add_DialogContent.Select_service')} />
             </SelectTrigger>
             <SelectContent>
               {serviceOptions.map((service) => (
                 <SelectItem key={service.id} value={service.id}>
-                  {service.nameEn}
+                  {/* {service.nameEn} */}
+                  {i18n.language === 'ar' ? service.nameAr : service.nameEn}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -184,13 +208,16 @@ export function AddServiceDialog({
         </div>
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+          {t('Sidebar.Services_Add_DialogContent.Cancel')}
           </Button>
           <Button onClick={handleAddService} disabled={!selected}>
-            Add Service
+          {t('Sidebar.Services_Add_DialogContent.Add_Service_btn')}
           </Button>
         </div>
       </DialogContent>
     </Dialog>
   );
 }
+
+
+

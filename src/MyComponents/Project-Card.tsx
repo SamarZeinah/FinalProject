@@ -14,7 +14,8 @@ import { Button } from "@/components/ui/button";
 import { IFormData } from "@/interfaces";
 import ProjectForm from "./project-form";
 import { toast } from "react-hot-toast";
-
+import { useTranslation } from "react-i18next";
+import { ar, enUS } from "date-fns/locale";
 interface IProps {
   project: IProjectData;
   pathUrl: string;
@@ -33,6 +34,8 @@ export default function ProjectCard({
   setIsLoading,
   isSuccess,
 }: IProps) {
+  const{t,i18n}=useTranslation();
+const currentLocale = i18n.language === "ar" ? ar : enUS;
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -223,15 +226,24 @@ export default function ProjectCard({
                     </motion.div>
                     <div>
                       <h3 className="text-sm font-semibold text-gray-500 mb-1">
-                        Timeline
+                        {t('ProjectCard.Timeline')}
                       </h3>
-                      <p className="text-gray-700">
+                      {/* <p className="text-gray-700">
                         {project?.startDate
                           ? format(new Date(project.startDate), "MMM dd, yyyy")
                           : ""}{" "}
                         -
                         {project?.endDate
                           ? format(new Date(project.endDate), "MMM dd, yyyy")
+                          : ""}
+                      </p> */}
+                      <p className="text-gray-700">
+                        {project?.startDate
+                          ? format(new Date(project.startDate), "MMM dd, yyyy", { locale: currentLocale })
+                          : ""}{" "}
+                        -
+                        {project?.endDate
+                          ? format(new Date(project.endDate), "MMM dd, yyyy", { locale: currentLocale })
                           : ""}
                       </p>
                     </div>
@@ -252,7 +264,7 @@ export default function ProjectCard({
                     </motion.div>
                     <div>
                       <h3 className="text-sm font-semibold text-gray-500 mb-1">
-                        Tools Used
+                      {t('ProjectCard.ToolsUsed')}
                       </h3>
                       <p className="text-gray-700">{project?.tools}</p>
                     </div>
@@ -271,7 +283,7 @@ export default function ProjectCard({
                   <div className="relative flex items-center justify-center bg-white py-4 px-8 rounded-2xl transition-colors group-hover:bg-transparent">
                     <span className="relative flex items-center text-blue-600 font-semibold group-hover:text-white transition-colors">
                       <Pencil className="w-5 h-5 mr-3" />
-                      Edit Project
+                      {t('ProjectCard.EditProject')}
                       <motion.div
                         className="ml-3"
                         initial={false}
@@ -293,7 +305,7 @@ export default function ProjectCard({
                   <div className="relative flex items-center justify-center py-4 px-8 rounded-2xl transition-colors group-hover:bg-rose-50">
                     <span className="relative flex items-center text-rose-500 font-semibold">
                       <Trash2 className="w-5 h-5 mr-3" />
-                      Delete Project
+                      {t('ProjectCard.DeleteProject')}
                     </span>
                   </div>
                 </motion.button>

@@ -27,7 +27,7 @@ export default function ConfirmDialog({
   handleConfirm,
   title,
   desc,
-  confirmText,
+  // confirmText,
   cancelText,
   isLoading,
 }: IProps) {

@@ -59,7 +59,8 @@ const queryClient = new QueryClient();
 
 function App() {
   
-    const { t } = useTranslation();
+    // const { t } = useTranslation();
+        const {i18n} = useTranslation();
     const lng=cookies.get("i18next")||"en";
     useEffect(()=>{
         window.document.dir=i18n.dir();

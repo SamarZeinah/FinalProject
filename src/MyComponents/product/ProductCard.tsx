@@ -51,7 +51,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onDelete }) => {
   const imageSrc = product.imagePath
     ? pathUrl + product.imagePath.substring(1)
     : "/placeholder.svg?height=300&width=400"
-    const{t,i18n}=useTranslation();
+    const{t}=useTranslation();
   return (
     <>
       <motion.div

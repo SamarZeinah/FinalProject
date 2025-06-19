@@ -428,7 +428,7 @@ const ProfileEditor = () => {
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-    let apiUrl;    
+    let apiUrl:string;    
     if (user_type === "عامل-فني" || user_type === "technical-worker") {
       apiUrl= `${pathUrl}/api/v1/technical-workers/user?userId=${
         userId || localStorage.getItem("user-id")

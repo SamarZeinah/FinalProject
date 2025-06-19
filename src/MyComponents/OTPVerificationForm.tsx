@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext, useTransition } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Loader2, AlertCircle } from 'lucide-react';

@@ -1,5 +1,5 @@
 
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { UserContext } from "@/Contexts/UserContext";
@@ -92,7 +92,8 @@ const Filters: React.FC<FiltersProps> = ({ onApplyFilters }) => {
     };
 
     console.log("Filters for backend:", JSON.stringify(filters, null, 2));
-    onApplyFilters(filters);
+    // onApplyFilters(filters);
+    onApplyFilters(filters.searchCriteria);
   };
 
   if (loading) return <div>Loading...</div>;

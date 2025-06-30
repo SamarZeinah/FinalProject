@@ -589,6 +589,441 @@
 "Edit-description":"Update the product details below to modify this listing",
 "Add-description":"Fill Out The Details Below To List Your Product On The Application"
 },
+"Ask":{
+ "Ask-Engineer":"Ask to Engineer", 
+ "Ask-Worker":"Ask to Worker",
+ "Request-Design":"Request a Design",
+ "Renovate-Home":"Renovate Your Home",
+ "Furnish-Home":"Furnish Your Home",
+ "Kitchen-Dressing":"Kitchen and Dressing"
+
+},
+"AskFileUpload":{
+" Attach-Photo":"Attach Photo & Attachments Here",
+"Drop-files-here":"Drop files here",
+"Click-browse-drag-drop":"Click to browse or drag and drop",
+"Supports":"Supports: Images, PDF, DOC, DOCX, XLS, XLSX, TXT"
+},
+"FurnishYourHome":{
+  "Phone-Number":"Phone Number",
+  "Enter-phone-number":"Enter phone number",
+  "Governorate":"Governorate",
+  "Select-Governorate":"Select Governorate",
+  "Furniture-Types":"Furniture Types",
+  "Select-furniture-Type":"Select furniture Type",
+  "Required-Duration":"Required Duration",
+  "Budget":"Budget",
+  "Enter-Budget":"Enter Budget",
+  "Notes":"Notes",
+  "Attach-Photos":"Attach Photos & Attachments",
+  "Next-btn":"Next",
+  "Back-btn":"Back",
+  "Submit-btn":"Submit",
+  "Submitting...":"Submitting...",
+    "validationSchema": {
+    "phoneNumber-matches" :"Invalid phone number",
+    "phoneNumber-required" :"Phone number is required",
+    "governorateId-required":"Governorate is required",
+    "budget-typeError":"Budget must be a number",
+    "budget-positive":"Budget must be a positive number",
+    "budget-required":"Budget is required",
+    "requiredDuration-typeError":"Required duration must be a number",
+    "requiredDuration-positive":"Required duration must be a positive number",
+    "requiredDuration-required":"Required duration is required",
+    "furnitureTypeId-required":"Furniture type is required"
+    }
+},
+"Ask-Eng-Worker":{
+  "Project-Name":"Project Name",
+  "Enter-project-name":"Enter project name",
+  "Engineering-Type":"Engineering Type",
+  "Select-engineering-type":"Select engineering type",
+  "Worker-Type":"Worker Type",
+  "Select-worker-type":"Select worker type",
+  "Unit-Type":"Unit Type",
+  "Select-unit-type":"Select unit type",
+  "Project-Description":"Project Description",
+  "Enter-project-description":"Enter project description",
+  "Phone-Number":"Phone Number",
+  "Enter-phone-number":"Enter phone number",
+  "Next-btn":"Next",
+  "Budget":"Budget",
+  "Enter-Budget":"Enter Budget",
+  "Governorate":"Governorate",
+  "Select-governorate":"Select governorate",
+  "City":"City",
+  "Select-city":"Select city",
+  "Urgency-Level":"Urgency Level",
+  "Select-urgency-level":"Select urgency level",
+  "Deadline":"Deadline",
+  "Select-date":"Select a date",
+  "Material":"Material",
+  "Select-material":"Select material",
+  "Attach-Photos":"Attach Photos & Attachments",
+  "Back-btn":"Back",
+  "Submit-btn":"Submit",
+  "Submitting...":"Submitting...",
+    "baseValidationSchema":{
+      "projectName-required":"Project name is required",
+      "phoneNumber-matches":"Invalid phone number",
+      "phoneNumber-required":"Phone number is required",
+      "projectDescription.required":"Project description is required",
+      "unitTypeId-min":"Unit type is required",
+      "budget-typeError":"Budget must be a number",
+      "budget-positive":"Budget must be a positive number",
+      "budget-required":"Budget is required",
+      "governorateId-min":"Governorate is required",
+      "cityId-min":"City is required"
+    },
+    "engineerValidationSchema":{
+      "engineerTypeId-min":"Engineering type is required",
+      "urgencyLevelId-min":"Urgency level is required",
+      "deadline-required":"Deadline is required"
+    },
+    "workerValidationSchema":{
+      "workerTypeId-min":"Worker type is required",
+      "materialId-min":"Material is required"
+    }
+},
+"RequestDesign":{
+  "Design":"Design",
+  "AI":"AI",
+  "Phone-Number":"Phone Number",
+  "Enter-phone-number":"Enter phone number",
+  "Unit-Type":"Unit Type",
+  "Select-unit-type":"Select unit type",
+  "Governorate":"Governorate",
+  "Select-Governorate":"Select Governorate",
+  "Unit-Area":"Unit Area",
+  "Budget":"Budget",
+  "Required-Duration":"Required Duration",
+  "Notes":"Notes",
+  " Confirming...":" Confirming...",
+  "Confirm":"Confirm",
+  "validationSchema": {
+    "phoneNumber-matches": "Invalid phone number",
+    "phoneNumber-required": "Phone number is required",
+    "unitTypeId-min": "Unit type is required",
+    "governorateId-min": "Governorate is required",
+    "unitArea-typeError": "unitArea must be a number",
+    "unitArea-positive": "unitArea must be a positive number",
+    "unitArea-required": "unitArea is required",
+    "budget-typeError": "Budget must be a number",
+    "budget-positive": "Budget must be a positive number",
+    "budget-required": "Budget is required",
+    "requiredDuration-typeError": "requiredDuration must be a number",
+    "requiredDuration-positive": "requiredDuration must be a positive number",
+    "requiredDuration-required": "requiredDuration is required"
+}
+},
+"Kitchen-Dressing":{
+ "Kitchen":"Kitchen",
+ "Dressing":"Dressing", 
+ "Phone-Number":"Phone Number",
+ "Enter-phone-number":"Enter phone number",
+ "Governorate":"Governorate",
+ "Select-Governorate":"Select Governorate",
+ "Kitchen-Types":"Kitchen Types",
+ "Select-kitchen-Type":"Select kitchen Type",
+ "Devices-Attached":"Devices Attached",
+ "Kitchen Size":"Kitchen Size",
+ "Enter-kitchen-size":"Enter kitchen size",
+ "Next-btn":"Next",
+ "Product-Material":"Product Material",
+ "Budget":"Budget",
+ "Enter-Budget":"Enter Budget",
+ "Required-Duration":"Required Duration",
+ "Notes":"Notes",
+ "Attach-Photos":"Attach Photos & Attachments",
+ "Back-btn":"Back",
+ "Submitting...":"Submitting...",
+ "Submit-btn":"Submit",
+ "validationSchema":{
+  "phoneNumber-matches": "Invalid phone number",
+  "phoneNumber-required": "Phone number is required",
+  "governorateId-min": "Governorate is required",
+  "budget-typeError":"Budget must be a number",
+  "budget-positive":"Budget must be a positive number",
+  "budget-required":"Budget is required",
+  "requiredDuration-typeError":"requiredDuration must be a number",
+  "requiredDuration-positive":"requiredDuration must be a positive number",
+  "requiredDuration-required":"requiredDuration is required",
+  "kitchenSize-typeError":"kitchenSize must be a number",
+  "kitchenSize-positive":"kitchenSize must be a positive number",
+  "kitchenSize-required":"kitchenSize is required",
+  "kitchenTypeId-min":"Kitchen type is required",
+  "devicesAttacheds-min":"At least one device must be selected",
+  "devicesAttacheds-required":"Devices are required",
+  "productMaterial-min":"At least one material must be selected",
+  "productMaterial-required":"Product material is required"
+  
+
+ }
+
+},
+"HomeRenovate":{
+  "Phone-Number":"Phone Number",
+  "Enter-phone-number":"Enter phone number",
+  "Governorate":"Governorate",
+  "Select-Governorate":"Select Governorate",
+  "Unit-Type":"Unit Type",
+  "Select-unit-type":"Select unit type",
+  "Is-Inside-Compound":"Is Inside Compound",
+  "Select-status":"Select inside compound status",
+  "True":"True",
+  "False":"False",
+  "Next-btn":"Next",
+  "Split-Your-Package":"Split Your Package",
+  "Fixed-Package":"Fixed Package",
+  "Unit-Status":"Unit Status",
+  "Select-unit-status":"Select unit status",
+  "Unit-Work-Type":"Unit Work Type",
+  "Select-unit-work-type":"Select unit work type",
+  "Work-Skill":"Work Skill",
+  "Select-work-skill":"Select work skill",
+  "Select-governorate":"Select governorate",
+  "City":"City",
+  "Select-city":"Select city",
+  "Unit-Area":"Unit Area",
+  "Enter-Unit-Area":"Enter Unit Area",
+  "Budget":"Budget",
+  "Enter-Budget":"Enter Budget",
+  "Region":"Region",
+  "Enter-Region":"Enter Region",
+  "Number-Rooms":"Number of Rooms",
+  "Number-Bathrooms":"Number of Bathrooms",
+  "Required-Duration":" Required Duration",
+  "Notes":"Notes",
+  "Back-btn":"Back",
+  "Submitting...":"Submitting...",
+  "Submit-btn":"Submit",
+"validationSchema":{
+  "phoneNumber-matches": "Invalid phone number",
+  "phoneNumber-required": "Phone number is required",
+  "unitTypeId-min": "Unit type is required",
+  "isInsideCompound-required":"Please select if inside compound",
+  "unitStatusesId-min": "Unit status is required",
+  "unitWorkTypesId-min": "Unit work type is required",
+  "workSkillsId-min": "Work skill is required",
+  "governorateId-min": "Governorate is required",
+  "cityId-min": "City is required",
+  "budget-typeError": "Budget must be a number",
+  "budget-positive":" Budget must be a positive number",
+  "budget-required": "Budget is required",
+  "unitArea-typeError": "unitArea must be a number",
+  "unitArea-positive":" unitArea must be a positive number",
+  "unitArea-required": "unitArea is required",
+  "region-typeError": "region must be a number",
+  "region-positive":" region must be a positive number",
+  "region-required": "region is required",
+  "numberOfRooms-typeError": "numberOfRooms must be a number",
+  "numberOfRooms-positive":" numberOfRooms must be a positive number",
+  "numberOfRooms-required": "numberOfRooms is required",
+  "numberOfBathrooms-typeError": "region must be a number",
+  "numberOfBathrooms-positive":" region must be a positive number",
+  "numberOfBathrooms-required": "region is required",
+  "requiredDuration-typeError": "requiredDuration must be a number",
+  "requiredDuration-positive":" requiredDuration must be a positive number",
+  "requiredDuration-required": "requiredDuration is required"
+}
+
+
+},
+"FixedPackage":{
+  "Package-Name:":"Package Name:",
+  "Price:":"Price:",
+  "EGP":"EGP",
+  "Booking...":"Booking...",
+  "Book-the-Package":"Book the Package"
+
+  
+},
+"ShopNow":{
+  "SearchBar":{
+    "What-looking-for?":"What are you looking for?",
+    "Searching...":"Searching..."
+  },
+  "Header":{
+    "Products":"Products",
+    "Showing":"Showing"
+  },
+ "MobileFilter": {
+  "Filters": "Filters",
+  "Filter-products-criteria": "Filter products by various criteria",
+    "FilterSidebar": {
+      "ClearAll": "Clear All",
+      "PriceRange": "Price Range",
+      "GO": "GO",
+      "TO": "TO",
+      "Min": "Min",
+      "Max": "Max",
+      "Colors":"Colors",
+      "Materials":"Materials",
+      "Business-Types":"Business Types",
+      "Business-Type-Categories":"Business Type Categories",
+      "Loading-products...":"Loading products...",
+      "Previous":"Previous",
+      "Next":"Next",
+      "Loading-configuration...":"Loading configuration..."
+    }
+}
+
+
+},
+"CartContext":{
+  "Error-parsing-cart":"Error parsing cart data",
+  "added-Successfully-cart!":"added Successfully to cart!",
+  "Product-added-cart!":"Product added to cart!",
+  "Updated-Successfully-quantity":" Updated Successfully New quantity",
+  "Product-quantity":"Product quantity",
+  "reduce":"reduce",
+  "delete":"delete",
+  "Removed-Successfully":"Removed Successfully from cart",
+  "Product-Removed-Successfully":"Product Removed Successfully from cart",
+  "Reduced-Successfully-New-quantity":"Reduced Successfully New quantity:",
+  "Product-Reduced-Successfully-New-quantity:":"Product Reduced Successfully New quantity:",
+  "Cannot-update":"Cannot update quantity for non-existent product",
+  "quantity":"quantity",
+  "increased":"increased",
+  "decreased":"decreased",
+  "Cart-cleared!":"Cart cleared!",
+  "item":"item",
+  "removed":"removed",
+  "useCart-must-used":"useCart must be used within a CartProvider"
+
+
+
+
+
+},
+"viewdetails":{
+  "Loading-product-details":"Loading product details...",
+  "Product-Not-Found":" Product Not Found",
+  "The-product-looking ":"The product you are looking for could not be found.",
+  "No-description-available":"No description available",
+  "Made-high-quality":"Made with high-quality materials:",
+  "Various-materials":"Various materials",
+  "Dimensions":"Dimensions",
+  "units":"units",
+  "Category":"Category",
+  "General":"General",
+  "High-quality":"High-quality construction and design",
+  "Product-ID":"Product ID",
+  "N/A":"N/A",
+  "Materials":"Materials",
+  "Available-Colors":"Available Colors",
+  "Total-Stock":"Total Stock"
+
+},
+"ProductOverview":{
+  "Product-Overview":"Product Overview",
+  "Highlights":"Highlights",
+  "Overview":"Overview",
+  "Specifications":"Specifications"
+},
+"ProductFeatures":{
+  "Product-Features":"Product Features",
+  "Show-Less":"Show Less",
+  "View-full-Product-Features":"View full Product Features"
+
+},
+"ProductsReviews":{
+  "Product-Ratings":"Product Ratings & Reviews",
+  "Overall-Rating":"Overall Rating",
+  "Loading-rating-data...":"Loading rating data...",
+  "Error-loading-rating-data":"Error loading rating data",
+  "Based-on":" Based on",
+  "rating":"rating",
+  "Reviews":"Reviews",
+  "Filter-By:":"Filter By:",
+  "All-stars":"All stars",
+  "Sort-By:":"Sort By:",
+  "Top-Reviews":"Top Reviews",
+  "Newest":"Newest",
+  "Loading-reviews...":"Loading reviews...",
+  "No-reviews-found":"No reviews found",
+  "Load-More-Reviews":"Load More Reviews"
+
+},
+"ProductsDetails":{
+  "Best-Seller":"Best Seller",
+  "in":"in",
+  "Saving:EGP":"Saving: EGP",
+  "Off":"Off",
+  "EGP":"EGP",
+  "Inclusive-of-VAT":"Inclusive of VAT",
+  "Delivery-by-ArciSpace":"Delivery by ArciSpace",
+  "High-Rated-Seller":"High Rated Seller",
+  "Low-Returns":"Low Returns",
+  "Cash-Delivery":"Cash on Delivery",
+  "Ranked":"Ranked",
+  "Explore-bestsellers":"Explore other bestsellers"
+
+},
+"ProductGallery":{
+  "Add-To-Cart":" Add to Cart"
+},
+"ProductRecommendations":{
+  "EGP":"EGP",
+  "SELLER":"SELLER",
+  "Sold-by":"Sold by",
+  "Positive-Rating":"Positive Ratings",
+  "Partner-Since": "Partner Since",
+  "Item-Described":" Item as Described",
+  "Great-Recent-Rating":" Great Recent Rating",
+  "Low-Return-Seller":"Low Return Seller",
+  "Free-delivery":"Free delivery on Pickup Points",
+  "This-item":"This item is not eligible for return"
+},
+"ShoppingCart":{
+  "Cart":"Cart",
+  "Clear-Cart":"Clear Cart",
+  "Your-cart-empty":"Your cart is empty",
+  "Add-some-products":"Add some products to get started!",
+  "Order-Summary":"Order Summary",
+  "APPLY":"APPLY",
+  "View-Available-Offers":"🎯 View Available Offers →",
+  "Subtotal":"Subtotal",
+  "items":"items",
+  "EGP":"EGP",
+  "Shipping-Fee":"Shipping Fee",
+  "Total":"Total",
+  "Inclusive-VAT":"Inclusive of VAT",
+  "Some-items":"Some items couldn't be loaded. Total may be incomplete",
+  "Monthly-payment":"Monthly payment plans from EGP 500",
+  "View-more-details":"View more details",
+  "Processing-Order...":"Processing Order...",
+  "Calculating...":"Calculating...",
+  "CHECKOUT":"CHECKOUT"
+
+
+},
+"CartItem":{
+"Loading product...":"Loading product...",
+"Error-loading-product":"Error loading product",
+"Remove-from-cart":" Remove from cart",
+"EGP":"EGP",
+"express":"express",
+"Free-Delivery":"Free Delivery",
+"Order-in":"Order in",
+"Get-it-by":"Get it by",
+"Business-Type":"Business Type",
+"1year-warranty":"1 year warranty",
+"Dimensions":"Dimensions:",
+"Remove":"Remove",
+"Move-to-Wishlist":"Move to Wishlist",
+"Wishlist":"Wishlist",
+"Qty":"Qty"
+
+},
+"ClearCartDialog":{
+  "Clear-Cart":"Clear Cart",
+  "Are-you-sure":"Are you sure you want to remove all",
+      "from-your-cart":"from your cart? This action cannot be undone.",
+    "Cancel":"Cancel",
+    "item":"item"
+
+},
   "errors": {
     "login_error": "An error occurred during login."
   }

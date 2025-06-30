@@ -92,6 +92,7 @@ export interface IServices{
     nameAr: string,
   }
 
+
 // ----------------------Product Interface ----------------------
 export interface IColor {
   id: number;
@@ -112,10 +113,23 @@ export interface IProductMaterial {
   name: string;
 }
 
+export interface IProductStock {
+    amount: number
+    color: {
+      id: number
+    }
+  }
+
 export interface IBusinessType {
   id: number;
   code: string;
   name: string;
+}
+export interface IBusinessTypeCategories {
+  id: number;
+  code: string;
+  name: string;
+  businessType: IBusinessType;
 }
 
 export interface IData {
@@ -123,6 +137,7 @@ export interface IData {
   productBaseUnits: IProductBaseUnit[];
   productMaterial: IProductMaterial[];
   businessTypes: IBusinessType[];
+  businessTypeCategories:IBusinessTypeCategories[]
 }
 
 export interface IProductFormData {
@@ -131,6 +146,9 @@ export interface IProductFormData {
   descriptionAr: string
   descriptionEn: string
   businessType: {
+    id: number
+  }
+  businessTypeCategory: {
     id: number
   }
   price: number
@@ -143,12 +161,7 @@ export interface IProductFormData {
   materials: {
     id: number
   }[]
-  stocks: {
-    amount: number
-    color: {
-      id: number
-    }
-  }[]
+  stocks:IProductStock[]
   imagePaths: string[] | {id:number,productId: number, imagePath: string|null}[]
 }
 export interface IProduct {
@@ -198,6 +211,7 @@ export interface IProductById {
   width: number;
   height: number;
   businessType: IBusinessType;
+  businessTypeCategory: IBusinessTypeCategories;
   baseUnit: IProductBaseUnit;
   materials: IProductMaterial[];
   stocks: IStock[];
@@ -205,6 +219,7 @@ export interface IProductById {
 }
 export interface IintialValues {
   businessType: string;
+  businessTypeCategory: string;
   productNameEn: string;
   productNameAr: string;
   price: string;

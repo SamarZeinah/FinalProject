@@ -20,6 +20,7 @@ import axios from "axios";
 import Logo from "/Logo.png";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import { SimpleCartIcon } from "@/Pages/Cart/CartIcon"
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -36,6 +37,8 @@ export default function Navbar() {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("user-id");
     localStorage.removeItem("user-type");
+        localStorage.removeItem("user-business")
+    localStorage.removeItem("user-business-id")
   }
 
   return (
@@ -121,6 +124,40 @@ export default function Navbar() {
                     <Link to="/brands" className="text-lg font-semibold">
                       {t("Profile_Navbar.Brands")}
                     </Link>
+                  
+      {/* new */}
+                    {/* Add Project/Product buttons in mobile menu */}
+                    {userToken &&
+                    (localStorage.getItem("user-type") === "engineer" ||
+                      localStorage.getItem("user-type") === "technical worker") ? (
+                      <Link to="/profile">
+                        <Button
+                          className="w-full text-[#2D2D4C] border border-[#2D2D4C] font-bold bg-white primary-grad hover:bg-gradient-to-r from-[#B8BCC5] to-[#F0ECE6] hover:opacity-90 transition-opacity duration-700 ease-in-out"
+                          onClick={() => setShowAddProject(true)}
+                        >
+                          Add Project
+                        </Button>
+                      </Link>
+                    ) : userToken &&
+                      (localStorage.getItem("user-type") === "store" ||
+                        localStorage.getItem("user-type") === "exhibition") ? (
+                      <div className="flex items-center gap-4">
+                        <Link to="/productlist">
+                          <Button className="text-[#2D2D4C]  font-bold bg-white primary-grad hover:bg-gradient-to-r from-[#B8BCC5] to-[#F0ECE6] hover:opacity-90 transition-opacity duration-700 ease-in-out rounded-xl">
+                            <List className="w-5 h-5" />
+                            Product List
+                          </Button>
+                        </Link>
+                        <Link to="/addproduct">
+                          <Button className="text-[#2D2D4C] border border-[#2D2D4C] font-bold bg-white hover:bg-gradient-to-r from-[#B8BCC5] to-[#F0ECE6] hover:opacity-90 transition-opacity duration-700 ease-in-out rounded-xl">
+                            <img src={vector || "/placeholder.svg"} alt="Logo" className="w-5 h-5" />
+                            Add Product
+                          </Button>
+                        </Link>
+                      </div>
+                    ) : null}
+  {/* new */}
+                    {/* Cart icon in mobile menu for general users */}
                   </nav>
                 )}
               </SheetContent>
@@ -183,6 +220,9 @@ export default function Navbar() {
           ) : null}
                                             {/* ..........................new ...........................*/}
 
+
+          {/* Cart Icon - Show only for general users when authenticated */}
+          {userToken && localStorage.getItem("user-type") === "general user" && <SimpleCartIcon size="lg" />}
 
           {userToken && (
             <DropdownMenu>
@@ -298,6 +338,5 @@ function JoinUsButton() {
     </DropdownMenu>
   );
 }
-
 
 

@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import Home from "./MyComponents/Home";
+// import Home from "./MyComponents/Home";
 import About from "./MyComponents/About";
 import NotFound from "./MyComponents/NotFound";
 import Layout from "./MyComponents/Layout";
@@ -11,9 +11,6 @@ import Login from "./MyComponents/Login";
 import SignUp from "./MyComponents/SignUp";
 import Client from "./Pages/Client";
 import Company from "./Pages/JoinUs/Company";
-import Engineer from "./Pages/JoinUs/Engineer";
-import Technical from "./Pages/JoinUs/Technical";
-import ForgetPassword from "./Pages/ForgetPassword";
 import ProtectedRoute from "./MyComponents/ProtectedRoute";
 import UserContextProvider from "./Contexts/UserContext";
 import AccessAccount from "./MyComponents/AccessAccount";
@@ -32,8 +29,12 @@ import cookies from 'js-cookie';
 import ProductList from "./Pages/ProductList";
 import EditProduct from "./Pages/JoinUs/EditProduct";
 import AddProduct from "./Pages/AddProduct";
-
-
+import Ask from "./Pages/Ask/Ask";
+import Viewdetails from "./Pages/Viewdetails.tsx";
+import { CartProvider } from "./Contexts/CartContext";
+import ShoppingCart from "./Pages/Cart/ShoppingCart.tsx";
+import OrderSuccess from "./Pages/Cart/Order-Success.tsx";
+import Home from "./Pages/Home/Home.tsx";
 i18n
   .use(initReactI18next)
   .use(LanguageDetector)
@@ -72,6 +73,12 @@ function App() {
       path: "",
       element: <Layout />,
       children: [
+             {
+          index: true,
+          element: (
+              <Home />
+          ),
+        },
         {
           path: "edit_profile",
           element: (
@@ -146,7 +153,38 @@ function App() {
             </ProtectedRoute>
           ),
         },
-
+        {
+          path: "Ask",
+          element: (
+            <ProtectedRoute>
+              <Ask />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "products/:id",
+          element: (
+            <ProtectedRoute>
+              <Viewdetails />
+            </ProtectedRoute>
+          ),
+        },
+         {
+          path: "cart",
+          element: (
+            <ProtectedRoute>
+              <ShoppingCart />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "order-success",
+          element: (
+            <ProtectedRoute>
+              <OrderSuccess />
+            </ProtectedRoute>
+          ),
+        },
         {
           path: "client",
           element: <Client />,
@@ -155,12 +193,16 @@ function App() {
             { path: "signup", element: <SignUp /> },
           ],
         },
-        { path: "forgot-password", element: <ForgetPassword /> },
-        { path: "access-account/:email", element: <AccessAccount /> },
+        // { path: "forgot-password", element: <ForgetPassword /> },
+        // { path: "access-account/:email", element: <AccessAccount /> },
+        // { path: "join-as/:userType", element: <Company /> },
+        // { path: "engineer", element: <Engineer /> },
+        // { path: "consultative", element: <Technical /> },
+        // { path: "*", element: <NotFound /> }, // Wildcard route for 404
+       { path: "access-account/:email", element: <AccessAccount /> },
         { path: "join-as/:userType", element: <Company /> },
-        { path: "engineer", element: <Engineer /> },
-        { path: "consultative", element: <Technical /> },
-        { path: "*", element: <NotFound /> }, // Wildcard route for 404
+        { path: "*", element: <NotFound /> }, // Wildcard route for 404   { path: "forgot-password", element: <ForgetPassword /> },
+     
       ],
     },
   ]);
@@ -169,9 +211,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
       <UserContextProvider>
+            <CartProvider>
         <I18nextProvider i18n={i18n}>
           <RouterProvider router={routes} />
         </I18nextProvider>
+        </CartProvider>
       </UserContextProvider>
     </QueryClientProvider>
   );

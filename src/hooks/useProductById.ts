@@ -29,7 +29,7 @@ const{i18n}=useTranslation()
         isLoading,
         error,isError
       } = useQuery({
-        queryKey: ["getProductById", productId],
+        queryKey: ["getProductById", productId,i18n.language],
         queryFn: getProduct,
       })
   const product = response?.data?.data as IProductById | undefined

@@ -76,6 +76,7 @@ export const ErrorMessage = ({ message }: { message: string }) => (
 // Product form interface
 interface ProductFormValues {
   businessType: string
+  
   productNameEn: string
   productNameAr: string
   price: string
@@ -402,6 +403,9 @@ const{t}=useTranslation();
   ): IProductFormData & { id?: number } => {
     // Find business type id from code
     const businessTypeId = businessTypes?.find((type) => type.code === values.businessType)?.id || 0
+ // Find business type category id from code
+    const businessTypeCategoryId =
+      data?.businessTypeCategories.find((category) => category.code === values.businessTypeCategory)?.id || 0
 
     // Find base unit id from code
     const baseUnitId = data?.productBaseUnits.find((unit) => unit.code === values.baseUnit)?.id || 0
@@ -439,6 +443,7 @@ const{t}=useTranslation();
       descriptionAr: values.descriptionAr,
       descriptionEn: values.descriptionEn,
       businessType: { id: businessTypeId },
+      businessTypeCategory: { id: businessTypeCategoryId },
       price: Number.parseFloat(values.price),
       length: values.length ? Number.parseFloat(values.length) : undefined,
       width: values.width ? Number.parseFloat(values.width) : undefined,

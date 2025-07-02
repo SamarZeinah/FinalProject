@@ -28,7 +28,7 @@ const Viewdetails = () => {
   console.log(`Is Loading: ${isLoading}`);
   console.log(`Product ID: ${id}`);
   const { visitProduct, isVisiting, visitError } = useVisitProduct()
-const{i18n}=useTranslation();
+// const{i18n}=useTranslation();
   // Track product visit when component mounts and product is loaded
   useEffect(() => {
     if (product && id && userToken) {

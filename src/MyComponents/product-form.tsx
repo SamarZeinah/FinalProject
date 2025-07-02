@@ -76,7 +76,7 @@ export const ErrorMessage = ({ message }: { message: string }) => (
 // Product form interface
 interface ProductFormValues {
   businessType: string
-  
+  businessTypeCategory: string
   productNameEn: string
   productNameAr: string
   price: string
@@ -94,7 +94,19 @@ interface ProductFormProps {
   initialValues?: IintialValues
   productData?: IProductById
 }
-
+const emptyInitialValues={
+      businessType: "",
+      businessTypeCategory: "",
+      productNameEn: "",
+      productNameAr: "",
+      price: "",
+      baseUnit: "",
+      descriptionEn: "",
+      descriptionAr: "",
+      length: "",
+      width: "",
+      height: "",
+    }
 export default function ProductForm({ isEditMode = false, productId, initialValues, productData }: ProductFormProps) {
   const navigate = useNavigate()
   const userContext = useContext(UserContext)
@@ -133,6 +145,7 @@ const{t}=useTranslation();
   // Validation schema
   const validationSchema = Yup.object({
     businessType: Yup.string().required(t("ProductForm.businessType")),
+    businessTypeCategory: Yup.string().required("Business type category is required"),
     productNameEn: Yup.string().required(t("ProductForm.productNameEn")),
     productNameAr: Yup.string().required(t("ProductForm.productNameAr")),
     price: Yup.string()
@@ -153,69 +166,108 @@ const{t}=useTranslation();
       return !value || !isNaN(Number(value))
     }),
   })
-  const formik = useFormik<ProductFormValues>({
-    initialValues: {
-      businessType: "",
-      productNameEn: "",
-      productNameAr: "",
-      price: "",
-      baseUnit: "",
-      descriptionEn: "",
-      descriptionAr: "",
-      length: "",
-      width: "",
-      height: "",
-    },
+  // const formik = useFormik<ProductFormValues>({
+  //   initialValues: {
+  //     businessType: "",
+  //     productNameEn: "",
+  //     productNameAr: "",
+  //     price: "",
+  //     baseUnit: "",
+  //     descriptionEn: "",
+  //     descriptionAr: "",
+  //     length: "",
+  //     width: "",
+  //     height: "",
+  //   },
+  //   validationSchema,
+  //   onSubmit: handleSubmit,
+  //   enableReinitialize: true,
+  // })
+   const formik = useFormik<ProductFormValues>({
+    initialValues: isEditMode && initialValues ? initialValues : emptyInitialValues,
     validationSchema,
     onSubmit: handleSubmit,
     enableReinitialize: true,
   })
 
-  // Initialize form with initial values if provided
-  // Update the useEffect that sets initial values to include stock IDs
+
+
+
+
+
+
+
+  // // Initialize form with initial values if provided
+  // // Update the useEffect that sets initial values to include stock IDs
+  // useEffect(() => {
+  //   if (initialValues) {
+  //     // Set materials if provided
+  //     if (initialValues.materials) {
+  //       setMaterials(initialValues.materials)
+  //     }
+
+  //     // Set color rows if provided, including stock IDs for existing stocks
+  //     if (initialValues.colorRows && productData?.stocks) {
+  //       const colorRowsWithIds = initialValues.colorRows.map((row: { color: string; stock: string }) => {
+  //         // Find matching stock in productData to get the ID
+  //         const matchingStock = productData.stocks.find(
+  //           (stock) => data?.colors.find((c) => c.code === row.color)?.id === stock.color.id,
+  //         )
+
+  //         return {
+  //           color: row.color,
+  //           stock: row.stock,
+  //           id: matchingStock?.id, // Include the ID if it exists
+  //         }
+  //       })
+
+  //       setColorRows(colorRowsWithIds)
+  //     } else if (initialValues.colorRows) {
+  //       setColorRows(initialValues.colorRows)
+  //     }
+
+  //     // Set form values
+  //     formik.setValues({
+  //       businessType: initialValues.businessType || "",
+  //       productNameEn: initialValues.productNameEn || "",
+  //       productNameAr: initialValues.productNameAr || "",
+  //       price: initialValues.price || "",
+  //       baseUnit: initialValues.baseUnit || "",
+  //       descriptionEn: initialValues.descriptionEn || "",
+  //       descriptionAr: initialValues.descriptionAr || "",
+  //       length: initialValues.length || "",
+  //       width: initialValues.width || "",
+  //       height: initialValues.height || "",
+  //     })
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [initialValues, productData, data?.colors])
+
+
+
+  // Set existing image paths if in edit mode
   useEffect(() => {
-    if (initialValues) {
-      // Set materials if provided
-      if (initialValues.materials) {
-        setMaterials(initialValues.materials)
-      }
+    if (isEditMode && productData && productData.imagePaths) {
+      // Reset deleted image IDs when loading a product
+      setDeletedImageIds([])
 
-      // Set color rows if provided, including stock IDs for existing stocks
-      if (initialValues.colorRows && productData?.stocks) {
-        const colorRowsWithIds = initialValues.colorRows.map((row: { color: string; stock: string }) => {
-          // Find matching stock in productData to get the ID
-          const matchingStock = productData.stocks.find(
-            (stock) => data?.colors.find((c) => c.code === row.color)?.id === stock.color.id,
-          )
-
-          return {
-            color: row.color,
-            stock: row.stock,
-            id: matchingStock?.id, // Include the ID if it exists
-          }
-        })
-
-        setColorRows(colorRowsWithIds)
-      } else if (initialValues.colorRows) {
-        setColorRows(initialValues.colorRows)
-      }
-
-      // Set form values
-      formik.setValues({
-        businessType: initialValues.businessType || "",
-        productNameEn: initialValues.productNameEn || "",
-        productNameAr: initialValues.productNameAr || "",
-        price: initialValues.price || "",
-        baseUnit: initialValues.baseUnit || "",
-        descriptionEn: initialValues.descriptionEn || "",
-        descriptionAr: initialValues.descriptionAr || "",
-        length: initialValues.length || "",
-        width: initialValues.width || "",
-        height: initialValues.height || "",
-      })
+      setExistingImagePaths(
+        productData.imagePaths
+          .filter((img) => img.imagePath) // Filter out any null image paths
+          .map((img) => ({
+            id: img.id,
+            productId: img.productId,
+            imagePath: img.imagePath,
+          })),
+      )
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialValues, productData, data?.colors])
+  }, [isEditMode, productData])
+
+
+
+
+
+
 
   // Set existing image paths if in edit mode
   useEffect(() => {
@@ -403,9 +455,14 @@ const{t}=useTranslation();
   ): IProductFormData & { id?: number } => {
     // Find business type id from code
     const businessTypeId = businessTypes?.find((type) => type.code === values.businessType)?.id || 0
- // Find business type category id from code
+ 
+ 
+    // Find business type category id from code
     const businessTypeCategoryId =
       data?.businessTypeCategories.find((category) => category.code === values.businessTypeCategory)?.id || 0
+
+
+
 
     // Find base unit id from code
     const baseUnitId = data?.productBaseUnits.find((unit) => unit.code === values.baseUnit)?.id || 0

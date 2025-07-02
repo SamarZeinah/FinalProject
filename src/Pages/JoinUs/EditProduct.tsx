@@ -46,6 +46,7 @@ export default function EditProduct() {
       // Transform API data to form initial values
       const formattedValues = {
         businessType: product.businessType.code,
+        businessTypeCategory: product.businessTypeCategory?.code ,
         productNameEn: product.nameEn,
         productNameAr: product.nameAr,
         price: product.price.toString(),

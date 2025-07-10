@@ -2,10 +2,15 @@
 
 import { motion } from "framer-motion"
 import ProductContainer from "./ProductContainer"
+import type { ApiProduct } from "../LandingPage"
+import { useTranslation } from "react-i18next"
 
-export default function Recommended() {
+interface RecommendedProps {
+  products: ApiProduct[]
+}
 
-
+export default function Recommended({ products }: RecommendedProps) {
+  const{t}=useTranslation();
   return (
     <main className=" mx-auto py-8 w-full ">
       <div className="mb-8">
@@ -15,12 +20,11 @@ export default function Recommended() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-black">RECOMMENDED</span> <span className="text-red-600">FOR YOU</span>
+          <span className="text-black">{t('RECOMMENDED.RECOMMENDED')}</span> <span className="text-red-600">{t('RECOMMENDED.FOR-YOU')}</span>
         </motion.h1>
       </div>
 
-    <ProductContainer/>
-      
+      <ProductContainer products={products} />
     </main>
   )
 }

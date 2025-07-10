@@ -1024,6 +1024,75 @@
     "item":"item"
 
 },
+"HeroBanner":{
+  "ASK-TO":"ASK TO",
+  "ENGINEER":"ENGINEER",
+  "WORKER":"WORKER",
+  "MODERN":"MODERN",
+  "KITCHEN":"KITCHEN",
+  "SHOP":"SHOP",
+  "NOW":"NOW",
+  "Try-Now":"Try Now"
+},
+"services":{
+  "Renovate-Your-Home":"Renovate Your Home",
+  "Kitchen-remodeling":"Kitchen remodeling",
+  "Ask-to-Technical":"Ask to Technical",
+  "Furnish-your-home":"Furnish your home",
+  "Request-design":"Request design",
+  "Ask-to-Engineer":"Ask to Engineer",
+  "Shop-now":"Shop now",
+  "Services":"Services",
+  "See-all":"See all"
+},
+"MidSection":{
+  "More-reasons":"More reasons to shop",
+  "Mega-deals":"Mega deals",
+  "In focus":"In focus",
+  "Fashion-deals":"Fashion deals",
+  "Gaming-deals":"Gaming deals",
+  "Baby-deals":"Baby deals",
+  "Stationery-deals":"Stationery deals"
+
+},
+"RECOMMENDED":{
+  "RECOMMENDED":"RECOMMENDED",
+  "FOR-YOU":"FOR YOU"
+
+},
+"ProductContainer":{
+ "No-products-available":"No products available" 
+},
+"Product-Card":{
+  "EGP":"EGP",
+  "sold-recently":"sold recently",
+  "Free-Delivery":"Free Delivery",
+  "Best-Seller":"Best Seller",
+  "Featured":"Featured"
+
+
+},
+"BrandSection":{
+  "EXPLORE":"EXPLORE",
+  "OFFICIAL-BRANDS-STORES":"OFFICIAL BRANDS STORES"
+
+},
+"CategorySection":{
+  "The-Top-BestSeller":" The Top BestSeller",
+  "SHOP-NOW":"SHOP NOW"
+},
+"Category-products":{
+"Desks-chairs":"Desks & chairs",
+"TV-units":"TV units",
+"Bean-bags":"Bean bags",
+"Accent-furniture":"Accent furniture",
+"Bedroom-furniture":"Bedroom furniture",
+"Coffee-side-tables":"Coffee & side tables",
+"Sofas-chairs":"Sofas & chairs",
+"Furniture":"Furniture",
+"SHOP-ALL":"SHOP ALL"
+
+},
   "errors": {
     "login_error": "An error occurred during login."
   }

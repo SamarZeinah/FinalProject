@@ -37,7 +37,7 @@ export function SimpleCartIcon({ className = "", size = "md" }: SimpleCartIconPr
   return (
     <Link to="/cart">
       <span className={`relative inline-block cursor-pointer  w- ${className}`}>
-        <ShoppingCart className={`${config.icon} text-gray-700 hover:text-blue-600 transition-colors`} />
+        <ShoppingCart className={`${config.icon} text-white-700 hover:text-blue-600 transition-colors`} />
 
         {totalItems > 0 && (
           <span

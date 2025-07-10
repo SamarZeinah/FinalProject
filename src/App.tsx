@@ -35,6 +35,19 @@ import { CartProvider } from "./Contexts/CartContext";
 import ShoppingCart from "./Pages/Cart/ShoppingCart.tsx";
 import OrderSuccess from "./Pages/Cart/Order-Success.tsx";
 import Home from "./Pages/Home/Home.tsx";
+import { FilterProvider } from "./Contexts/FilterContext.tsx";
+import ForgetPassword from "./Pages/ForgetPassword.tsx";
+import OrderDetailsPage from "./Pages/UserPages/OrderDetailsPage.tsx";
+import WishlistPage from "./Pages/UserPages/WishlistPage.tsx";
+import OrdersPage from "./Pages/UserPages/OrdersPage.tsx";
+import ProfilePage from "./Pages/UserPages/ProfilePage.tsx";
+import AddressesPage from "./Pages/UserPages/AddressesPage.tsx";
+import PaymentsPage from "./Pages/UserPages/PaymentsPage.tsx";
+import NotificationsPage from "./Pages/UserPages/NotificationsPage.tsx";
+import EngineerDetails from "./Pages/LandingPage/TopEngineers/EngineerDetails.tsx";
+import TechnicalWorkerDetails from "./Pages/LandingPage/TopWorkers/TechnicalWorkerDetails.tsx";
+import UsrLayout from "./Pages/UserPages/components/Layout";
+
 i18n
   .use(initReactI18next)
   .use(LanguageDetector)
@@ -185,6 +198,92 @@ function App() {
             </ProtectedRoute>
           ),
         },
+         {
+          path: "engineers/:id",
+          element: (
+            <ProtectedRoute>
+              <EngineerDetails />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "technical-workers/:id",
+          element: (
+            <ProtectedRoute>
+              <TechnicalWorkerDetails />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/",
+          element: <UsrLayout/>,
+          children: [
+            {
+              index: true,
+              element: (
+                <ProtectedRoute>
+                  <OrdersPage />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: "orders",
+              element: (
+                <ProtectedRoute>
+                  <OrdersPage />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: "orders/:id",
+              element: (
+                <ProtectedRoute>
+                  <OrderDetailsPage />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: "wishlist",
+              element: (
+                <ProtectedRoute>
+                  <WishlistPage />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: "user-profile",
+              element: (
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: "addresses",
+              element: (
+                <ProtectedRoute>
+                  <AddressesPage />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: "payments",
+              element: (
+                <ProtectedRoute>
+                  <PaymentsPage />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: "notifications",
+              element: (
+                <ProtectedRoute>
+                  <NotificationsPage />
+                </ProtectedRoute>
+              ),
+            },
+          ],
+        },
         {
           path: "client",
           element: <Client />,
@@ -199,10 +298,10 @@ function App() {
         // { path: "engineer", element: <Engineer /> },
         // { path: "consultative", element: <Technical /> },
         // { path: "*", element: <NotFound /> }, // Wildcard route for 404
-       { path: "access-account/:email", element: <AccessAccount /> },
+       { path: "forgot-password", element: <ForgetPassword /> },
+        { path: "access-account/:email", element: <AccessAccount /> },
         { path: "join-as/:userType", element: <Company /> },
-        { path: "*", element: <NotFound /> }, // Wildcard route for 404   { path: "forgot-password", element: <ForgetPassword /> },
-     
+        { path: "*", element: <NotFound /> }, // Wildcard route for 404
       ],
     },
   ]);
@@ -213,8 +312,10 @@ function App() {
       <UserContextProvider>
             <CartProvider>
         <I18nextProvider i18n={i18n}>
-          <RouterProvider router={routes} />
-        </I18nextProvider>
+ <FilterProvider>
+            <RouterProvider router={routes} />
+          </FilterProvider>  
+                </I18nextProvider>
         </CartProvider>
       </UserContextProvider>
     </QueryClientProvider>

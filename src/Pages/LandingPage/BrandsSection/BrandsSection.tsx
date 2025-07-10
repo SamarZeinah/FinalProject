@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 // Brand data structure
 interface Brand {
@@ -93,7 +94,7 @@ export default function BrandSection() {
       transition: { type: "spring", stiffness: 100 },
     },
   }
-
+const{t}=useTranslation();
   return (
     <div className="w-full mx-auto  py-12 overflow-hidden">
       <div className="mb-8">
@@ -103,8 +104,8 @@ export default function BrandSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-black">EXPLORE</span>{" "}
-          <span className="text-red-600">OFFICIAL BRANDS STORES</span>
+          <span className="text-black">{t('BrandSection.EXPLORE')}</span>{" "}
+          <span className="text-red-600">{t('BrandSection.OFFICIAL-BRANDS-STORES')}</span>
         </motion.h1>
       </div>
 
@@ -172,7 +173,7 @@ export default function BrandSection() {
             key={index}
             onClick={() => setCurrentPage(index)}
             className={`h-2 rounded-full transition-all duration-300 ${
-              currentPage === index ? "w-6 bg-red-600" : "w-2 bg-gray-300"
+              currentPage === index ? "w-6 bg-purple-500" : "w-2 bg-gray-300"
             }`}
             aria-label={`Go to page ${index + 1}`}
           />

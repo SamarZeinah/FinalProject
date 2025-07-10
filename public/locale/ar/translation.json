@@ -1029,6 +1029,70 @@
   "Cancel": "إلغاء",
   "item":"عناصر"
 },
+"HeroBanner": {
+  "ASK-TO": "اطلب من",
+  "ENGINEER": "مهندس",
+  "WORKER": "عامل",
+  "MODERN": "عصري",
+  "KITCHEN": "مطبخ",
+  "SHOP": "متجر",
+   "NOW":"الان",
+  "Try-Now": "جرّب الآن"
+},
+"services": {
+  "Renovate-Your-Home": "جدد منزلك",
+  "Kitchen-remodeling": "تجديد المطبخ",
+  "Ask-to-Technical": "اسأل فني",
+  "Furnish-your-home": "أثّث منزلك",
+  "Request-design": "اطلب تصميم",
+  "Ask-to-Engineer": "اسأل مهندس",
+  "Shop-now": "تسوّق الآن",
+  "Services": "الخدمات",
+"See-all": "عرض الكل"
+
+},
+"MidSection": {
+  "More-reasons": "المزيد من الأسباب للتسوّق",
+  "Mega-deals": "عروض ضخمة",
+  "In focus": "في دائرة الضوء",
+  "Fashion-deals": "عروض الموضة",
+  "Gaming-deals": "عروض الألعاب",
+  "Baby-deals": "عروض الأطفال",
+  "Stationery-deals": "عروض القرطاسية"
+},
+"RECOMMENDED": {
+  "RECOMMENDED": "موصى به",
+  "FOR-YOU": "لك"
+},
+"Product-Card": {
+  "EGP": "ج.م",
+  "sold-recently": "تم البيع مؤخرًا",
+  "Free-Delivery": "توصيل مجاني",
+  "Best-Seller": "الأكثر مبيعًا",
+  "Featured": "مميز"
+},
+"BrandSection": {
+  "EXPLORE": "استكشاف",
+  "OFFICIAL-BRANDS-STORES": "المتاجر الرسمية للعلامات التجارية"
+},
+"CategorySection": {
+  "The-Top-BestSeller": "الأكثر مبيعًا",
+  "SHOP-NOW": "تسوق الآن"
+},
+
+"Category-products": {
+  "Desks-chairs": "مكاتب وكراسي",
+  "TV-units": "وحدات تلفزيون",
+  "Bean-bags": "كراسي بين باج",
+  "Accent-furniture": "أثاث ديكوري",
+  "Bedroom-furniture": "أثاث غرف النوم",
+  "Coffee-side-tables": "طاولات قهوة وجانبية",
+  "Sofas-chairs": "كنب وكراسي",
+  "Furniture": "الأثاث",
+  "SHOP-ALL": "تسوق الكل"
+
+},
+
 
   "errors": {
     "login_error": "حدث خطأ أثناء تسجيل الدخول."

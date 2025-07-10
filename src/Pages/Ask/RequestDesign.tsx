@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import AiPage from "../AiPage";
 
 type RequestDesignProps = {
   userToken: string | null;
@@ -538,6 +539,9 @@ const RequestDesign: React.FC<RequestDesignProps> = ({
             </Form>
           )}
         </Formik>
+      )}
+      {activeTab === 2 && (
+        <AiPage/>
       )}
     </>
   );

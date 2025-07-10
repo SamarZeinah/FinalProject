@@ -1,6 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 
 // Furniture category data structure
 interface CategoryProducts {
@@ -9,46 +11,47 @@ interface CategoryProducts {
   image: string
 }
 
+
+export default function CategoryProducts() {
+  const{t}=useTranslation()
 // Furniture categories data
 const categories: CategoryProducts[] = [
   {
     id: 1,
-    name: "Desks & chairs",
+    name: t('Category-products.Desks-chairs'),
     image: "/ProductImages/prod4.png",
   },
   {
     id: 2,
-    name: "TV units",
+    name: t('Category-products.TV-units'),
     image: "/ProductImages/prod7.png",
   },
   {
     id: 3,
-    name: "Bean bags",
+    name:  t('Category-products.Bean-bags'),
     image: "/ProductImages/prod8.png",
   },
   {
     id: 4,
-    name: "Accent furniture",
+    name:  t('Category-products.Accent-furniture'),
     image: "/ProductImages/prod9.png",
   },
   {
     id: 5,
-    name: "Bedroom furniture",
+    name: t('Category-products.Bedroom-furniture'),
     image: "/ProductImages/prod10.png",
   },
   {
     id: 6,
-    name: "Coffee & side tables",
+    name:  t('Category-products.Coffee-side-tables'),
     image: "/ProductImages/prod11.png",
   },
   {
     id: 7,
-    name: "Sofas & chairs",
+    name: t('Category-products.Sofas-chairs'),
     image: "/ProductImages/prod12.png",
   },
 ]
-
-export default function CategoryProducts() {
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -73,10 +76,13 @@ export default function CategoryProducts() {
   return (
     <div className=" mx-auto px-2 py-12">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-semibold text-gray-800">Furniture</h2>
-        <button className="border border-gray-800 px-6 py-2 text-gray-800 hover:bg-gray-800 hover:text-white transition-colors duration-300">
-          SHOP ALL
-        </button>
+        <h2 className="text-3xl font-semibold text-gray-800">{t('Category-products.Furniture')}</h2>
+    <Link
+            to="/Ask?type=shop"
+            className="border border-gray-800 px-6 py-2 text-gray-800 hover:bg-gray-800 hover:text-white transition-colors duration-300"
+          >
+           {t('Category-products.SHOP-ALL')}
+          </Link>
       </div>
 
       <motion.div

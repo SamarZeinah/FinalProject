@@ -9,7 +9,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import CompactImageUpload from "../MyComponents/ImagePreviewGallery ";
 import { Button } from "@/components/ui/button";
-import { Download, Loader2 } from "lucide-react";
+import {  Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";

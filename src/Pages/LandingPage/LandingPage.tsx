@@ -158,7 +158,7 @@ export interface TechnicalWorker {
 }
 
 export default function LandingPage() {
-  const{t,i18n}=useTranslation();
+  const{i18n}=useTranslation();
   const userContext = useContext(UserContext)
   if (!userContext) {
     throw new Error("UserContext must be used within a UserContextProvider")

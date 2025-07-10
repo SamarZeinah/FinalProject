@@ -33,13 +33,13 @@ export default function Category({
 
         <div className="flex justify-between items-center my-8">
           <h2 className="text-3xl font-semibold text-gray-800">
-             Highest Rated 
+             {t('category.Highest-Rated')}
           </h2>
           <Link
             to="/Ask?type=shop"
             className="border border-gray-800 px-6 py-2 text-gray-800 hover:bg-gray-800 hover:text-white transition-colors duration-300"
           >
-            SHOP NOW
+             {t('category.SHOP-NOW')}
           </Link>
         </div>
 

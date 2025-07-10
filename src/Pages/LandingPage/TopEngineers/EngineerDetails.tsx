@@ -25,6 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { UserContext } from "@/Contexts/UserContext"
+import { useTranslation } from "react-i18next"
 
 // Engineer data structure based on your API
 interface EngineerType {
@@ -130,6 +131,7 @@ export default function EngineerDetails() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 console.log(engineer)
+const{t,i18n}=useTranslation();
   // Fetch engineer details
   useEffect(() => {
     const fetchEngineerDetails = async () => {
@@ -139,7 +141,7 @@ console.log(engineer)
         setLoading(true)
         const response = await fetch(`${pathUrl}/api/v1/engineers/${id}`, {
           headers: {
-            "Accept-Language": "en",
+            "Accept-Language": i18n.language,
             Authorization: `Bearer ${userToken}`,
           },
         })
@@ -158,7 +160,7 @@ console.log(engineer)
     }
 
     fetchEngineerDetails()
-  }, [id, pathUrl, userToken])
+  }, [id, pathUrl, userToken,i18n.language])
 
 
 
@@ -187,7 +189,7 @@ console.log(engineer)
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading engineer details...</p>
+          <p className="text-gray-600">{t('EngineerDetails.Loading-engineer-details')}</p>
         </motion.div>
       </div>
     )
@@ -198,11 +200,11 @@ console.log(engineer)
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Engineer Not Found</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('EngineerDetails."Engineer-Not-Found')}</h2>
           <p className="text-gray-600 mb-6">{error || "The engineer you're looking for doesn't exist."}</p>
           <Button onClick={() => navigate(-1)} variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Go Back
+            {t('EngineerDetails.Go-Back')}
           </Button>
         </motion.div>
       </div>
@@ -221,7 +223,6 @@ console.log(engineer)
       day: "numeric",
     })
   }
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -243,7 +244,7 @@ console.log(engineer)
               className="hover:bg-gray-100"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t('EngineerDetails.Back')}
             </Button>
           </motion.div>
 
@@ -317,7 +318,7 @@ console.log(engineer)
                       <span className="ml-3 text-lg text-gray-600">
                         {engineer.averageRate > 0
                           ? engineer.averageRate.toFixed(1)
-                          : "New"}
+                          : t('EngineerDetails.New')}
                       </span>
                     </div>
 
@@ -338,7 +339,7 @@ console.log(engineer)
                     {/* Experience - Larger */}
                     <div className="flex items-center justify-center text-gray-600 text-lg mb-8">
                       <Briefcase className="h-5 w-5 mr-2" />
-                      <span>{engineer.yearsOfExperience} years experience</span>
+                      <span>{engineer.yearsOfExperience} {t('EngineerDetails.years-experience')}</span>
                     </div>
                   </motion.div>
 
@@ -358,7 +359,7 @@ console.log(engineer)
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-4 rounded-lg font-medium transition-colors flex items-center justify-center text-base"
                     >
                       <MessageCircle className="h-4 w-4 mr-2" />
-                      Send Message
+                      {t('EngineerDetails.Send-Message')}
                     </motion.button>
 
                     <div className="grid grid-cols-2 gap-3">
@@ -369,7 +370,7 @@ console.log(engineer)
                         className="bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors flex items-center justify-center"
                       >
                         <Phone className="h-4 w-4 mr-2" />
-                        Call
+                        {t('EngineerDetails.Call')}
                       </motion.button>
 
                       <motion.button
@@ -379,7 +380,7 @@ console.log(engineer)
                         className="bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors flex items-center justify-center"
                       >
                         <Mail className="h-4 w-4 mr-2" />
-                        Email
+                        {t('EngineerDetails.Email')}
                       </motion.button>
                     </div>
                   </motion.div>
@@ -396,7 +397,7 @@ console.log(engineer)
                         transition={{ delay: 0.7 }}
                       >
                         <h3 className="text-lg font-semibold text-gray-700 mb-4">
-                          Connect
+                          {t('EngineerDetails.Connect')}
                         </h3>
                         <div className="flex justify-center space-x-4">
                           {engineer.facebookLink && (
@@ -456,7 +457,7 @@ console.log(engineer)
                   <CardHeader>
                     <CardTitle className="flex items-center text-xl">
                       <User className="h-6 w-6 mr-3 text-blue-600" />
-                      About {engineer.user.firstName}
+                      {t('EngineerDetails.About')} {engineer.user.firstName}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -474,7 +475,7 @@ console.log(engineer)
                   <CardHeader>
                     <CardTitle className="flex items-center text-xl">
                       <Briefcase className="h-6 w-6 mr-3 text-blue-600" />
-                      Services & Expertise ({engineer.engineerServ.length})
+                     {t('EngineerDetails.Services-Expertise')}({engineer.engineerServ.length})
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -504,7 +505,7 @@ console.log(engineer)
                   <CardHeader>
                     <CardTitle className="flex items-center text-xl">
                       <Award className="h-6 w-6 mr-3 text-blue-600" />
-                      Professional Information
+                      {t('EngineerDetails.Professional-Information')}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
@@ -512,7 +513,7 @@ console.log(engineer)
                       <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-gray-600 font-medium">
-                            Engineer Type:
+                             {t('EngineerDetails.Engineer-Type')}
                           </span>
                           <Award className="h-5 w-5 text-green-600" />
                         </div>
@@ -524,12 +525,12 @@ console.log(engineer)
                       <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-lg border border-blue-200">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-gray-600 font-medium">
-                            Experience:
+                          {t('EngineerDetails.Experience')}
                           </span>
                           <Briefcase className="h-5 w-5 text-blue-600" />
                         </div>
                         <span className="font-bold text-blue-700">
-                          {engineer.yearsOfExperience} years
+                          {engineer.yearsOfExperience}{t('EngineerDetails.years')}
                         </span>
                       </div>
                     </div>
@@ -537,7 +538,7 @@ console.log(engineer)
                     <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-4 rounded-lg border border-purple-200">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-gray-600 font-medium">
-                          Status:
+                          {t('EngineerDetails.Status')}
                         </span>
                         <CheckCircle className="h-5 w-5 text-purple-600" />
                       </div>
@@ -556,12 +557,12 @@ console.log(engineer)
                     <div>
                       <h4 className="font-semibold text-gray-800 mb-3 flex items-center text-lg">
                         <Calendar className="h-5 w-5 mr-2 text-blue-600" />
-                        Timeline
+                        {t('EngineerDetails.Timeline')}
                       </h4>
                       <div className="space-y-3">
                         <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                           <span className="text-gray-600 font-medium">
-                            Joined:
+                            {t('EngineerDetails.Joined')}
                           </span>
                           <span className="font-semibold">
                             {formatDate(engineer.createdDate)}
@@ -569,7 +570,7 @@ console.log(engineer)
                         </div>
                         <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                           <span className="text-gray-600 font-medium">
-                            Last Updated:
+                           {t('EngineerDetails.Last-Updated')}
                           </span>
                           <span className="font-semibold">
                             {formatDate(engineer.modifiedDate)}
@@ -581,12 +582,12 @@ console.log(engineer)
                     <div>
                       <h4 className="font-semibold text-gray-800 mb-3 flex items-center text-lg">
                         <User className="h-5 w-5 mr-2 text-blue-600" />
-                        Contact Information
+                        {t('EngineerDetails.Contact-Information')}
                       </h4>
                       <div className="space-y-3">
                         <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                           <span className="text-gray-600 font-medium">
-                            Email:
+                          {t('EngineerDetails.Email')}
                           </span>
                           <span className="font-semibold text-sm">
                             {engineer.user.email}
@@ -594,7 +595,7 @@ console.log(engineer)
                         </div>
                         <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                           <span className="text-gray-600 font-medium">
-                            Phone:
+                           {t('EngineerDetails.Phone')}
                           </span>
                           <span className="font-semibold">
                             {engineer.user.phone || "Not provided"}

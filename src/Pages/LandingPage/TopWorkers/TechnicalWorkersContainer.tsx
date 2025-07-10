@@ -5,6 +5,7 @@ import TechnicalWorkerCard from "./TechnicalWorkerCard"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { motion } from "framer-motion"
 import type { TechnicalWorker } from "./TechnicalWorkerCard"
+import { useTranslation } from "react-i18next"
 
 interface TechnicalWorkersContainerProps {
   workers: TechnicalWorker[]
@@ -13,7 +14,7 @@ interface TechnicalWorkersContainerProps {
 export default function TechnicalWorkersContainer({ workers }: TechnicalWorkersContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
-
+const{t}=useTranslation()
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768)
@@ -31,7 +32,7 @@ export default function TechnicalWorkersContainer({ workers }: TechnicalWorkersC
   if (!workers || !Array.isArray(workers) || workers.length === 0) {
     return (
       <div className="flex items-center justify-center py-12">
-        <p className="text-gray-500 text-lg">No technical workers available</p>
+        <p className="text-gray-500 text-lg">{t('Top-Workers.No-workers-available')}</p>
       </div>
     )
   }
@@ -44,7 +45,7 @@ export default function TechnicalWorkersContainer({ workers }: TechnicalWorkersC
   if (validWorkers.length === 0) {
     return (
       <div className="flex items-center justify-center py-12">
-        <p className="text-gray-500 text-lg">No valid technical workers found</p>
+        <p className="text-gray-500 text-lg">{t('Top-Workers.No-valid-workers-found')}</p>
       </div>
     )
   }

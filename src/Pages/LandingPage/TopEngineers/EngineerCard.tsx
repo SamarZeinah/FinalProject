@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import type { Engineer } from "../LandingPage";
 import { UserContext } from "@/Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function EngineerCard({ engineer }: { engineer: Engineer }) {
   const userContext = useContext(UserContext);
@@ -50,7 +51,7 @@ export default function EngineerCard({ engineer }: { engineer: Engineer }) {
   const averageRate = engineer.averageRate || 0;
   const bio = engineer.bio || "";
   const services = engineer.engineerServ || [];
-
+const{t}=useTranslation();
   return (
     <motion.div
       className="bg-white rounded-lg shadow-sm border border-gray-200 h-full flex flex-col relative overflow-hidden cursor-pointer"
@@ -65,7 +66,7 @@ export default function EngineerCard({ engineer }: { engineer: Engineer }) {
       {/* Top Badge */}
       <div className="absolute top-3 left-3 z-10">
         <Badge className="bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full">
-          Top Engineer
+          {t('engineerCard.Top-Engineer')}
         </Badge>
       </div>
 
@@ -102,11 +103,11 @@ export default function EngineerCard({ engineer }: { engineer: Engineer }) {
           <div className="flex items-center">
             <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
             <span className="text-gray-800 font-medium ml-1">
-              {averageRate > 0 ? averageRate.toFixed(1) : "New"}
+              {averageRate > 0 ? averageRate.toFixed(1) : t('engineerCard.New')}
             </span>
           </div>
           <span className="text-gray-500 text-sm ml-2">
-            ({yearsOfExperience} years exp.)
+            ({yearsOfExperience}  {t('engineerCard.years-exp')})
           </span>
         </div>
 
@@ -134,7 +135,7 @@ export default function EngineerCard({ engineer }: { engineer: Engineer }) {
         <div className="mb-3 flex-grow">
           <div className="flex items-center text-gray-600 text-sm mb-2">
             <Briefcase className="h-4 w-4 mr-1" />
-            <span>Services ({services.length})</span>
+            <span> {t('engineerCard.Services')} ({services.length})</span>
           </div>
           {services.length > 0 ? (
             <div className="flex flex-wrap gap-1">
@@ -152,12 +153,12 @@ export default function EngineerCard({ engineer }: { engineer: Engineer }) {
                   variant="outline"
                   className="text-xs px-2 py-0.5 bg-gray-50 text-gray-600 border-gray-200"
                 >
-                  +{services.length - 2} more
+                  +{services.length - 2}  {t('engineerCard.more')}
                 </Badge>
               )}
             </div>
           ) : (
-            <p className="text-gray-500 text-xs">No services listed</p>
+            <p className="text-gray-500 text-xs"> {t('engineerCard.No-services-listed')}</p>
           )}
         </div>
 
@@ -173,7 +174,7 @@ export default function EngineerCard({ engineer }: { engineer: Engineer }) {
             onClick={handleContactClick}
           >
             <MessageCircle className="h-4 w-4 mr-2" />
-            Contact Engineer
+             {t('engineerCard.Contact-Engineer')}
           </Button>
         </div>
       </div>

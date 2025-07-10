@@ -26,6 +26,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { UserContext } from "@/Contexts/UserContext"
+import { useTranslation } from "react-i18next"
 
 // Technical Worker data structure based on your API
 interface WorkerType {
@@ -130,7 +131,7 @@ export default function TechnicalWorkerDetails() {
   const [worker, setWorker] = useState<TechnicalWorkerData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
+const{t,i18n}=useTranslation()
   // Fetch technical worker details
   useEffect(() => {
     const fetchWorkerDetails = async () => {
@@ -140,7 +141,7 @@ export default function TechnicalWorkerDetails() {
         setLoading(true)
         const response = await fetch(`${pathUrl}/api/v1/technical-workers/${id}`, {
           headers: {
-            "Accept-Language": "en",
+            "Accept-Language": i18n.language,
             Authorization: `Bearer ${userToken}`,
           },
         })
@@ -159,7 +160,7 @@ export default function TechnicalWorkerDetails() {
     }
 
     fetchWorkerDetails()
-  }, [id, pathUrl, userToken])
+  }, [id, pathUrl, userToken,i18n.language])
 
 
 
@@ -188,7 +189,7 @@ export default function TechnicalWorkerDetails() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading technical worker details...</p>
+          <p className="text-gray-600">{t('WorkerDetails.Loading-worker-details')}</p>
         </motion.div>
       </div>
     )
@@ -199,11 +200,11 @@ export default function TechnicalWorkerDetails() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Technical Worker Not Found</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('WorkerDetails.Worker-Not-Found')}</h2>
           <p className="text-gray-600 mb-6">{error || "The technical worker you're looking for doesn't exist."}</p>
           <Button onClick={() => navigate(-1)} variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Go Back
+            {t('WorkerDetails.Go-Back')}
           </Button>
         </motion.div>
       </div>
@@ -231,7 +232,7 @@ export default function TechnicalWorkerDetails() {
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
             <Button onClick={() => navigate(-1)} variant="ghost" size="sm" className="hover:bg-gray-100">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t('WorkerDetails.Back')}
             </Button>
           </motion.div>
 
@@ -288,7 +289,7 @@ export default function TechnicalWorkerDetails() {
                         ))}
                       </div>
                       <span className="ml-3 text-lg text-gray-600">
-                        {worker.averageRate > 0 ? worker.averageRate.toFixed(1) : "New"}
+                        {worker.averageRate > 0 ? worker.averageRate.toFixed(1) : t('WorkerDetails.New')}
                       </span>
                     </div>
 
@@ -306,7 +307,7 @@ export default function TechnicalWorkerDetails() {
                     {/* Experience - Larger */}
                     <div className="flex items-center justify-center text-gray-600 text-lg mb-8">
                       <Briefcase className="h-5 w-5 mr-2" />
-                      <span>{worker.yearsOfExperience} years experience</span>
+                      <span>{worker.yearsOfExperience} {t('WorkerDetails.years-experience')}</span>
                     </div>
                   </motion.div>
 
@@ -326,7 +327,7 @@ export default function TechnicalWorkerDetails() {
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-4 rounded-lg font-medium transition-colors flex items-center justify-center text-base"
                     >
                       <MessageCircle className="h-4 w-4 mr-2" />
-                      Send Message
+                     {t('WorkerDetails.Send-Message')}
                     </motion.button>
 
                     <div className="grid grid-cols-2 gap-3">
@@ -338,7 +339,7 @@ export default function TechnicalWorkerDetails() {
                         disabled={!worker.user.phone}
                       >
                         <Phone className="h-4 w-4 mr-2" />
-                        Call
+                        {t('WorkerDetails.Call')}
                       </motion.button>
 
                       <motion.button
@@ -348,7 +349,7 @@ export default function TechnicalWorkerDetails() {
                         className="bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors flex items-center justify-center"
                       >
                         <Mail className="h-4 w-4 mr-2" />
-                        Email
+                        {t('WorkerDetails.Email')}
                       </motion.button>
                     </div>
                   </motion.div>
@@ -362,7 +363,7 @@ export default function TechnicalWorkerDetails() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.7 }}
                       >
-                        <h3 className="text-lg font-semibold text-gray-700 mb-4">Connect</h3>
+                        <h3 className="text-lg font-semibold text-gray-700 mb-4">{t('WorkerDetails.Connect')}</h3>
                         <div className="flex justify-center space-x-4">
                           {worker.facebookLink && (
                             <motion.a
@@ -421,7 +422,7 @@ export default function TechnicalWorkerDetails() {
                   <CardHeader>
                     <CardTitle className="flex items-center text-xl">
                       <User className="h-6 w-6 mr-3 text-blue-600" />
-                      About {worker.user.firstName}
+                      {t('WorkerDetails.About')} {worker.user.firstName}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -438,7 +439,7 @@ export default function TechnicalWorkerDetails() {
                   <CardHeader>
                     <CardTitle className="flex items-center text-xl">
                       <Briefcase className="h-6 w-6 mr-3 text-blue-600" />
-                      Services & Expertise ({worker.workerServs.length})
+                     {t('WorkerDetails.Services-Expertise')}({worker.workerServs.length})
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -466,7 +467,7 @@ export default function TechnicalWorkerDetails() {
                   <CardHeader>
                     <CardTitle className="flex items-center text-xl">
                       <Award className="h-6 w-6 mr-3 text-blue-600" />
-                      Professional Information
+                      {t('WorkerDetails.Professional-Information')}
                     </CardTitle>
                   </CardHeader>
 
@@ -475,7 +476,7 @@ export default function TechnicalWorkerDetails() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-gray-600 font-medium">Worker Type:</span>
+                          <span className="text-gray-600 font-medium">{t('WorkerDetails.Worker-Type')}</span>
                           <Award className="h-5 w-5 text-green-600" />
                         </div>
                         <span className="font-bold text-green-700">{worker.type.name}</span>
@@ -483,16 +484,16 @@ export default function TechnicalWorkerDetails() {
 
                       <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-lg border border-blue-200">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-gray-600 font-medium">Experience:</span>
+                          <span className="text-gray-600 font-medium">{t('WorkerDetails.Experience')}</span>
                           <Briefcase className="h-5 w-5 text-blue-600" />
                         </div>
-                        <span className="font-bold text-blue-700">{worker.yearsOfExperience} years</span>
+                        <span className="font-bold text-blue-700">{worker.yearsOfExperience} {t('WorkerDetails.years')}</span>
                       </div>
                     </div>
 
                     <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-4 rounded-lg border border-purple-200">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-gray-600 font-medium">Status:</span>
+                        <span className="text-gray-600 font-medium">{t('WorkerDetails.Status')}</span>
                         <CheckCircle className="h-5 w-5 text-purple-600" />
                       </div>
                       <Badge variant={worker.user.enabled ? "default" : "secondary"} className="font-bold">
@@ -505,15 +506,15 @@ export default function TechnicalWorkerDetails() {
                     <div>
                       <h4 className="font-semibold text-gray-800 mb-3 flex items-center text-lg">
                         <Calendar className="h-5 w-5 mr-2 text-blue-600" />
-                        Timeline
+                        {t('WorkerDetails.Timeline')}
                       </h4>
                       <div className="space-y-3">
                         <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                          <span className="text-gray-600 font-medium">Joined:</span>
+                          <span className="text-gray-600 font-medium">{t('WorkerDetails.Joined')}</span>
                           <span className="font-semibold">{formatDate(worker.createdDate)}</span>
                         </div>
                         <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                          <span className="text-gray-600 font-medium">Last Updated:</span>
+                          <span className="text-gray-600 font-medium">{t('WorkerDetails.Last-Updated')}</span>
                           <span className="font-semibold">{formatDate(worker.modifiedDate)}</span>
                         </div>
                       </div>
@@ -522,15 +523,15 @@ export default function TechnicalWorkerDetails() {
                     <div>
                       <h4 className="font-semibold text-gray-800 mb-3 flex items-center text-lg">
                         <User className="h-5 w-5 mr-2 text-blue-600" />
-                        Contact Information
+                        {t('WorkerDetails.Contact-Information')}
                       </h4>
                       <div className="space-y-3">
                         <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                          <span className="text-gray-600 font-medium">Email:</span>
+                          <span className="text-gray-600 font-medium">{t('WorkerDetails.Email')}</span>
                           <span className="font-semibold text-sm">{worker.user.email}</span>
                         </div>
                         <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                          <span className="text-gray-600 font-medium">Phone:</span>
+                          <span className="text-gray-600 font-medium">{t('WorkerDetails.Phone')}</span>
                           <span className="font-semibold">{worker.user.phone || "Not provided"}</span>
                         </div>
                       </div>

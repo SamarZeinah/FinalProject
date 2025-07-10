@@ -1092,6 +1092,90 @@
   "SHOP-ALL": "تسوق الكل"
 
 },
+"category": {
+  "Highest-Rated": "الأعلى تقييمًا",
+  "SHOP-NOW": "تسوّق الآن"
+},
+"Top-Engineers": {
+  "TOP": "أعلى",
+  "ENGINEERS": "المهندسين"
+},
+"engineerCard": {
+  "Top-Engineer": "أفضل مهندس",
+  "New": "جديد",
+  "years-exp": " سنوات خبرة",
+  "Services": "الخدمات",
+  "more": "المزيد",
+  "No-services-listed": "لا توجد خدمات مدرجة",
+  "Contact-Engineer": "تواصل مع المهندس"
+},
+"Top-Workers": {
+  "TOP": "اعلى",
+  "WORKERS": "الفنيين",
+  "No-workers-available": "لا يوجد فنيون متاحون",
+  "No-valid-workers-found": "لم يتم العثور على فنيين صالحين"
+},
+
+"WorkerCard": {
+  "Top-Worker": "أفضل فني",
+  "New": "جديد",
+  "years-exp": " سنوات خبرة",
+  "Services": "الخدمات",
+  "more": "المزيد",
+  "No-services-listed": "لا توجد خدمات مدرجة",
+  "Contact-Worker": "تواصل مع الفني"
+},
+"EngineerDetails": {
+  "Loading-engineer-details": "جارٍ تحميل بيانات المهندس...",
+  "Engineer-Not-Found": "لم يتم العثور على المهندس",
+  "Go-Back": "العودة",
+  "Back":"العودة",
+  "New": "جديد",
+  "years-experience": "سنوات الخبرة",
+  "Send-Message": "إرسال رسالة",
+  "Call": "اتصال",
+  "Email": "البريد الإلكتروني",
+  "Connect": "تواصل",
+  "About": "حول",
+  "Services-Expertise": "الخدمات والخبرة",
+  "Professional-Information": "المعلومات المهنية",
+  "Engineer-Type": "نوع المهندس:",
+  "Experience": "الخبرة:",
+  "Status": "الحالة:",
+  "Timeline": "الجدول الزمني",
+  "Joined": "تاريخ الانضمام:",
+  "Last-Updated": "آخر تحديث:",
+  "Contact-Information": "معلومات التواصل",
+  " Email": "البريد الإلكتروني:",
+  "Phone": "الهاتف:",
+  "years": "سنوات"
+
+},
+"WorkerDetails": {
+  "Loading-worker -details": "جارٍ تحميل بيانات الفني...",
+  "Worker-Not-Found": "الفني غير موجود",
+  "Go-Back": "العودة",
+  "Back": "رجوع",
+  "New": "جديد",
+  "years-experience": "سنوات الخبرة",
+  "Send-Message": "إرسال رسالة",
+  "Call": "اتصال",
+  "Connect": "تواصل",
+  "About": "نبذة",
+  "Services-Expertise": "الخدمات والخبرة",
+  "Professional-Information": "المعلومات المهنية",
+  "Worker-Type": "نوع الفني:",
+  "Experience": "الخبرة:",
+  "Status": "الحالة:",
+  "Timeline": "الجدول الزمني",
+  "Joined": "تاريخ الانضمام:",
+  "Last-Updated": "آخر تحديث:",
+  "Contact-Information": "معلومات الاتصال",
+  "Email": "البريد الإلكتروني:",
+  "Phone": "الهاتف:",
+  "years": "سنوات"
+},
+
 
 
   "errors": {

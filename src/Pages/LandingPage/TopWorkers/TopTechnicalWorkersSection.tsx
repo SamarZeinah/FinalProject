@@ -3,6 +3,7 @@
 import TechnicalWorkersContainer from "./TechnicalWorkersContainer"
 import type { TechnicalWorker } from "./TechnicalWorkerCard"
 import { motion } from 'framer-motion';
+import { useTranslation } from "react-i18next";
 
 interface TopTechnicalWorkersSectionProps {
   workers: TechnicalWorker[]
@@ -13,6 +14,7 @@ export default function TopTechnicalWorkersSection({ workers }: TopTechnicalWork
   if (!workers || workers.length === 0) {
     return null
   }
+  const{t}=useTranslation();
 
   return (
     <div className="mx-auto py-8 w-full">
@@ -23,7 +25,7 @@ export default function TopTechnicalWorkersSection({ workers }: TopTechnicalWork
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-black">TOP</span> <span className="text-red-600">WORKERS</span>
+          <span className="text-black">{t('Top-Workers.TOP')}</span> <span className="text-red-600">{t('Top-Workers.WORKERS')}</span>
         </motion.h1>
       </div>
 

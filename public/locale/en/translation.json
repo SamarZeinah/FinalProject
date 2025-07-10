@@ -1093,6 +1093,89 @@
 "SHOP-ALL":"SHOP ALL"
 
 },
+"category":{
+  "Highest-Rated":" Highest Rated",
+  "SHOP-NOW":"SHOP NOW"
+},
+"Top-Engineers":{
+ "TOP":"TOP",
+ "ENGINEERS":"ENGINEERS",
+ "No-engineers-available":"No engineers available",
+ "No-valid-engineers-found":"No valid engineers found"
+},
+"engineerCard":{
+  "Top-Engineer":"Top Engineer",
+  "New":"New",
+  "years-exp":" years exp.",
+  "Services":"Services",
+  "more":"more",
+  "No-services-listed":"No services listed",
+  "Contact-Engineer":"Contact Engineer"
+},
+"Top-Workers":{
+"TOP":"TOP",
+ "WORKERS":"WORKERS",
+ "No-workers-available":"No technical workers available",
+ "No-valid-workers-found":"No valid technical workers found"
+},
+"WorkerCard":{
+  "Top-Worker":"Top Worker",
+  "New":"New",
+  "years-exp":" years exp.",
+  "Services":"Services",
+  "more":"more",
+  "No-services-listed":"No services listed",
+  "Contact-Worker":"Contact Worker"
+},
+"EngineerDetails":{
+  "Loading-engineer-details":"Loading engineer details...",
+  "Engineer-Not-Found":"Engineer Not Found",
+  "Go-Back":" Go Back",
+  "Back":"Back",
+  "New":"New",
+  "years-experience":"years experience",
+  "Send-Message":"Send Message",
+  "Call":"Call",
+  "Email":"Email",
+  "Connect":"Connect",
+  "About":"About",
+  "Services-Expertise":"Services & Expertise",
+  "Professional-Information":"Professional Information",
+  "Engineer-Type":"Engineer Type:",
+  "Experience":" Experience:",
+  "Status":"Status:",
+  "Timeline":"Timeline",
+  "Joined":"Joined:",
+  "Last-Updated":"Last Updated:",
+  "Contact-Information":"Contact Information",
+  " Email":" Email:",
+  "Phone":"  Phone:",
+  "years":"years"
+},
+"WorkerDetails":{
+  "Loading-worker -details":"Loading  technical worker details...",
+  "Worker-Not-Found":"technical Worker Not Found",
+  "Go-Back":" Go Back",
+  "Back":"Back",
+  "New":"New",
+  "years-experience":"years experience",
+  "Send-Message":"Send Message",
+  "Call":"Call",
+  "Connect":"Connect",
+  "About":"About",
+  "Services-Expertise":"Services & Expertise",
+  "Professional-Information":"Professional Information",
+  "Worker-Type":"Worker Type:",
+  "Experience":" Experience:",
+  "Status":"Status:",
+  "Timeline":"Timeline",
+  "Joined":"Joined:",
+  "Last-Updated":"Last Updated:",
+  "Contact-Information":"Contact Information",
+  "Email":" Email:",
+  "Phone":"  Phone:",
+  "years":"years"
+},
   "errors": {
     "login_error": "An error occurred during login."
   }

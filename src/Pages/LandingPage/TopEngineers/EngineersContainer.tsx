@@ -5,6 +5,7 @@ import EngineerCard from "./EngineerCard"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { motion } from "framer-motion"
 import type { Engineer } from "../LandingPage"
+import { useTranslation } from "react-i18next"
 
 interface EngineersContainerProps {
   engineers: Engineer[]
@@ -13,7 +14,7 @@ interface EngineersContainerProps {
 export default function EngineersContainer({ engineers }: EngineersContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
-
+const{t}=useTranslation();
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768)
@@ -31,7 +32,7 @@ export default function EngineersContainer({ engineers }: EngineersContainerProp
   if (!engineers || !Array.isArray(engineers) || engineers.length === 0) {
     return (
       <div className="flex items-center justify-center py-12">
-        <p className="text-gray-500 text-lg">No engineers available</p>
+        <p className="text-gray-500 text-lg">{t('Top-Engineers.No-engineers-available')}</p>
       </div>
     )
   }
@@ -44,7 +45,7 @@ export default function EngineersContainer({ engineers }: EngineersContainerProp
   if (validEngineers.length === 0) {
     return (
       <div className="flex items-center justify-center py-12">
-        <p className="text-gray-500 text-lg">No valid engineers found</p>
+        <p className="text-gray-500 text-lg">{t('Top-Engineers.No-valid-engineers-found')}</p>
       </div>
     )
   }
